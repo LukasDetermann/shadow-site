@@ -1,0 +1,19 @@
+site:
+  title: Shadow Api
+  start_page: Shadow-Api::index.adoc
+  robots: allow
+content:
+  sources:
+    - url: ../shadow
+      branches: master
+      start_path: documentation
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+  supplemental_files:
+    supplemental-ui
+output:
+  dir: ./target/antora/site/
+antora:
+  extensions:
+    - '@antora/collector-extension'

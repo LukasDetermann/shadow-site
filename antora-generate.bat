@@ -1,0 +1,1 @@
+npx antora .\antora-playbook.yml && start "" "file:///%cd%/target/antora/site/Shadow-Api/index.html"
