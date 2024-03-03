@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Shadow Api :: Shadow Api</title>
+    <meta name="generator" content="Antora 3.1.7">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <a href="#">Shadow Api</a>
+            </div>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <a class="navbar-item" href="index.html">Home</a>
+                <a class="navbar-item" href="Annotation%20Processing.html">Implementations</a>
+                <a class="navbar-item" href="article/Meta%20Model.html">Articles</a>
+                <a class="navbar-item" href="https://github.com/LukasDetermann/shadow">
+                    <span class="icon">
+                        <svg aria-hidden="true" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 98 96">
+                            <path fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
+                                  fill="#fff"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header><div class="body">
+<div class="nav-container" data-component="Shadow-Api" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Shadow-Api</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Implementations</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Annotation%20Processing.html">Annotation Processing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Reflection.html">reflection</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="java.lang.model.html">java.lang.model</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Articles</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="article/Meta%20Model.html">Meta Model Design</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link is-current"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Shadow-Api</a></li>
+    <li><a href="index.html">Shadow Api</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Shadow Api</h1>
+<div class="sect1">
+<h2 id="_why_shadow_api"><a class="anchor" href="#_why_shadow_api"></a>Why Shadow Api?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are a lot of different Meta-Programming Apis.
+Each having unique concepts and quirks.
+This makes Meta-Programming harder to understand and creates a maintenance overhead.
+Once something is written with java.lang.reflect it&#8217;s hard to change it to an Annotation Processor.
+Some Apis like
+<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/lang/model/package-summary.html">javax.lang.model</a>,
+are not up to the normal JDK standard.</p>
+</div>
+<div class="paragraph">
+<p>Shadow Api offers:</p>
+</div>
+<details>
+<summary class="title">Straightforward data structure</summary>
+<div class="content">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Shadow Api</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JDK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>Shadow</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Declared</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Class</p>
+</li>
+<li>
+<p>Enum</p>
+</li>
+<li>
+<p>Record</p>
+</li>
+<li>
+<p>Annotation</p>
+<div class="ulist">
+<ul>
+<li>
+<p>AnnotationUsage</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Array</p>
+</li>
+<li>
+<p>Executable</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Constructor</p>
+</li>
+<li>
+<p>Method</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Intersection</p>
+</li>
+<li>
+<p>Void</p>
+</li>
+<li>
+<p>Module</p>
+</li>
+<li>
+<p>Package</p>
+</li>
+<li>
+<p>RecordComponent</p>
+</li>
+<li>
+<p>Null</p>
+</li>
+<li>
+<p>Primitive</p>
+</li>
+<li>
+<p>Generic</p>
+</li>
+<li>
+<p>Wildcard</p>
+</li>
+<li>
+<p>Variable</p>
+<div class="ulist">
+<ul>
+<li>
+<p>EnumConstant</p>
+</li>
+<li>
+<p>Field</p>
+</li>
+<li>
+<p>Parameter</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Cell with a list</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>TypeMirror</p>
+<div class="ulist">
+<ul>
+<li>
+<p>ReferenceType</p>
+<div class="ulist">
+<ul>
+<li>
+<p>ArrayType</p>
+</li>
+<li>
+<p>DeclaredType</p>
+</li>
+<li>
+<p>ErrorType</p>
+</li>
+<li>
+<p>NullType</p>
+</li>
+<li>
+<p>TypeVariable</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>ExecutableType</p>
+</li>
+<li>
+<p>IntersectionType</p>
+</li>
+<li>
+<p>NoType</p>
+</li>
+<li>
+<p>PrimitiveType</p>
+</li>
+<li>
+<p>UnionType</p>
+</li>
+<li>
+<p>WildcardType</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>AnnotationMirror</p>
+</li>
+<li>
+<p>Element</p>
+<div class="ulist">
+<ul>
+<li>
+<p>ExecutableElement</p>
+</li>
+<li>
+<p>ModuleElement</p>
+</li>
+<li>
+<p>PackageElement</p>
+</li>
+<li>
+<p>RecordComponentElement</p>
+</li>
+<li>
+<p>TypeElement</p>
+</li>
+<li>
+<p>TypeParameterElement</p>
+</li>
+<li>
+<p>VariableElement</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="title">Safe conversion between objects</summary>
+<div class="content">
+<div class="paragraph">
+<p>Let&#8217;s say you process the following class and want to get the type of the List</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class MyClass
+{
+   private final List&lt;String&gt; myField;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Shadow Api</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Shadow myField = context.getClassOrThrow("MyClass")
+                        .getFieldOrThrow("myField")
+                        .getType();
+//Converters limit the conversion to possible types
+Shadow genericType = convert(myField).toInterfaceOrThrow()
+                                     .getGenericTypes()
+                                     .get(0);
+
+assertEquals(context.getClassOrThrow("java.lang.String"), genericType);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">JDK</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Elements elements = AnnotationProcessingAdapter.getElements(context);
+//get a type -&gt; Element data structure
+List&lt;? extends Element&gt; myClass = elements.getTypeElement("MyClass")
+                                          .getEnclosedElements();
+
+//get fields of that type -&gt; Element data structure
+VariableElement myField = ElementFilter
+      .fieldsIn(myClass)
+      .stream()
+      .filter(field -&gt; field.getSimpleName()
+                            .toString()
+                            .equals("myField"))
+      .findAny()
+      .orElseThrow();
+
+//get Generic -&gt; switch to Type data structure
+TypeMirror genericType = ((DeclaredType) myField.asType()).getTypeArguments().get(0);
+
+//switch back to Element data structure for comparison
+Element genericElement = ((DeclaredType) genericType).asElement();
+
+assertEquals(elements.getTypeElement("java.lang.String"), genericElement);</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Better documentation, especially for hard to understand topics</summary>
+<div class="content">
+<div class="listingblock">
+<div class="title">Shadow Api. The javadoc uses @snippet</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface LangModelContext {
+   //..
+
+   /**
+   * Used when constructing types to compare to at compile time that contain multiple,
+   * on each other depended, generics.
+   * it answers the question: given
+   *
+   * public class MyClass&lt;A extends Comparable&lt;B&gt;, B extends Comparable&lt;A&gt;&gt; {}
+   *
+   * and A being String what can B be by returning the "simplest" possible answer.
+   * In this case String. The code for the example
+   *
+   * Class myClass = context.getClassOrThrow("MyClass");
+   * Declared string = context.getDeclaredOrThrow("java.lang.String");
+   * Class withGenerics = context.withGenerics(myClass,
+   *                                         string,
+   *                                         //the unboundWildcard will be replaced with the result
+   *                                         context.getConstants().getUnboundWildcard());
+   *
+   * Class capture = context.interpolateGenerics(withGenerics);
+   *
+   * Shadow stringRep = Optional.of(capture.getGenericTypes().get(1))
+   *                            .map(Converter::convert)
+   *                            .map(ShadowConverter::toGenericOrThrow)
+   *                            .map(Generic::getExtends)
+   *                            .map(Converter::convert)
+   *                            .map(ShadowConverter::toInterfaceOrThrow)
+   *                            .map(Interface::getGenericTypes)
+   *                            .map(shadows -&gt; shadows.get(0))
+   *                            .orElseThrow();
+   *
+   * Assertions.assertEquals(string, stringRep);
+   */
+   Class interpolateGenerics(Class aClass);
+
+   //..
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">jdk</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Types {
+   //...
+
+  /**
+   * {@return the erasure of a type}
+   *
+   * @param t  the type to be erased
+   * @throws IllegalArgumentException if given a type for a package or module
+   * @jls 4.6 Type Erasure
+   */
+  TypeMirror erasure(TypeMirror t);
+
+  //...
+}</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Adapter for good JDK interoperability</summary>
+<div class="content">
+<details>
+<summary class="title">javax.lang.model</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.api.lang_model;
+
+import io.determann.shadow.api.Annotationable;
+import io.determann.shadow.api.modifier.Modifier;
+import io.determann.shadow.api.shadow.Module;
+import io.determann.shadow.api.shadow.Package;
+import io.determann.shadow.api.shadow.Void;
+import io.determann.shadow.api.shadow.*;
+import io.determann.shadow.internal.lang_model.LangModelContextImpl;
+import io.determann.shadow.internal.lang_model.annotationvalue.AnnotationUsageImpl;
+import io.determann.shadow.internal.lang_model.annotationvalue.AnnotationValueImpl;
+import io.determann.shadow.internal.lang_model.shadow.*;
+
+import javax.lang.model.element.*;
+import javax.lang.model.type.*;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
+import java.util.List;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toUnmodifiableSet;
+
+public interface LangModelAdapter
+{
+   static AnnotationMirror getMirror(AnnotationUsage annotationUsage)
+   {
+      return ((AnnotationUsageImpl) annotationUsage).getAnnotationMirror();
+   }
+
+   static DeclaredType getType(Declared declared)
+   {
+      return ((DeclaredImpl) declared).getMirror();
+   }
+
+   static ArrayType getType(Array array)
+   {
+      return ((ArrayImpl) array).getMirror();
+   }
+
+   static ExecutableType getType(Executable executable)
+   {
+      return ((ExecutableImpl) executable).getMirror();
+   }
+
+   static TypeMirror getType(Shadow shadow)
+   {
+      return ((ShadowImpl) shadow).getMirror();
+   }
+
+   static TypeVariable getType(Generic generic)
+   {
+      return ((GenericImpl) generic).getMirror();
+   }
+
+   static IntersectionType getType(Intersection intersection)
+   {
+      return ((IntersectionImpl) intersection).getMirror();
+   }
+
+   static NoType getType(Module module)
+   {
+      return ((ModuleImpl) module).getMirror();
+   }
+
+   static NullType getType(Null aNull)
+   {
+      return ((NullImpl) aNull).getMirror();
+   }
+
+   static NoType getType(Package aPackage)
+   {
+      return ((PackageImpl) aPackage).getMirror();
+   }
+
+   static PrimitiveType getType(Primitive primitive)
+   {
+      return ((PrimitiveImpl) primitive).getMirror();
+   }
+
+   static NoType getType(Void aVoid)
+   {
+      return ((VoidImpl) aVoid).getMirror();
+   }
+
+   static WildcardType getType(Wildcard wildcard)
+   {
+      return ((WildcardImpl) wildcard).getMirror();
+   }
+
+   static Element getElement(Annotationable annotationable)
+   {
+      if (annotationable instanceof Declared declared)
+      {
+         return getElement(declared);
+      }
+      if (annotationable instanceof Executable executable)
+      {
+         return getElement(executable);
+      }
+      if (annotationable instanceof Generic generic)
+      {
+         return getElement(generic);
+      }
+      if (annotationable instanceof Module module)
+      {
+         return getElement(module);
+      }
+      if (annotationable instanceof Package aPackage)
+      {
+         return getElement(aPackage);
+      }
+      if (annotationable instanceof RecordComponent recordComponent)
+      {
+         return getElement(recordComponent);
+      }
+      if (annotationable instanceof Variable&lt;?&gt; variable)
+      {
+         return getElement(variable);
+      }
+      throw new IllegalArgumentException();
+   }
+
+   static TypeElement getElement(Declared declared)
+   {
+      return ((DeclaredImpl) declared).getElement();
+   }
+
+   static ExecutableElement getElement(Executable executable)
+   {
+      return ((ExecutableImpl) executable).getElement();
+   }
+
+   static TypeParameterElement getElement(Generic generic)
+   {
+      return ((GenericImpl) generic).getElement();
+   }
+
+   static ModuleElement getElement(Module module)
+   {
+      return ((ModuleImpl) module).getElement();
+   }
+
+   static PackageElement getElement(Package aPackage)
+   {
+      return ((PackageImpl) aPackage).getElement();
+   }
+
+   static RecordComponentElement getElement(RecordComponent recordComponent)
+   {
+      return ((RecordComponentImpl) recordComponent).getElement();
+   }
+
+   static VariableElement getElement(Variable&lt;?&gt; variable)
+   {
+      return ((VariableImpl) variable).getElement();
+   }
+
+   static Module getModule(LangModelContext context, Element element)
+   {
+      return getShadow(context, getElements(context).getModuleOf(element));
+   }
+
+   static String getName(Element element)
+   {
+      return element.getSimpleName().toString();
+   }
+
+   static String getJavaDoc(LangModelContext context, Element element)
+   {
+      return getElements(context).getDocComment(element);
+   }
+
+   static List&lt;AnnotationUsage&gt; getAnnotationUsages(LangModelContext context, Element element)
+   {
+      return getAnnotationUsages(context, getElements(context).getAllAnnotationMirrors(element));
+   }
+
+   static List&lt;AnnotationUsage&gt; getDirectAnnotationUsages(LangModelContext context, Element element)
+   {
+      return getAnnotationUsages(context, element.getAnnotationMirrors());
+   }
+
+   static Set&lt;Modifier&gt; getModifiers(Element element)
+   {
+      return element.getModifiers().stream().map(LangModelAdapter::mapModifier).collect(toUnmodifiableSet());
+   }
+
+   static Modifier mapModifier(javax.lang.model.element.Modifier modifier)
+   {
+      return switch (modifier)
+      {
+         case PUBLIC -&gt; Modifier.PUBLIC;
+         case PROTECTED -&gt; Modifier.PROTECTED;
+         case PRIVATE -&gt; Modifier.PRIVATE;
+         case ABSTRACT -&gt; Modifier.ABSTRACT;
+         case STATIC -&gt; Modifier.STATIC;
+         case SEALED -&gt; Modifier.SEALED;
+         case NON_SEALED -&gt; Modifier.NON_SEALED;
+         case FINAL -&gt; Modifier.FINAL;
+         case STRICTFP -&gt; Modifier.STRICTFP;
+         case DEFAULT -&gt; Modifier.DEFAULT;
+         case TRANSIENT -&gt; Modifier.TRANSIENT;
+         case VOLATILE -&gt; Modifier.VOLATILE;
+         case SYNCHRONIZED -&gt; Modifier.SYNCHRONIZED;
+         case NATIVE -&gt; Modifier.NATIVE;
+      };
+   }
+
+   /**
+    * {@link Element}s represent a usage. so for example a field may have the type {@code List&lt;String&gt;}. When you want the resulting {@link Shadow}
+    * to represent {@code List&lt;String&gt;} and not just {@code List&lt;T&gt;} use the {@link Element} to create it.
+    *
+    * @see #getShadow(LangModelContext, TypeMirror)
+    */
+   static &lt;SHADOW extends Shadow&gt; SHADOW getShadow(LangModelContext context, Element element)
+   {
+      return (SHADOW) switch (element.getKind())
+      {
+         case PACKAGE -&gt; new PackageImpl(context, (PackageElement) element);
+         case ENUM, ANNOTATION_TYPE -&gt; new DeclaredImpl(context, (TypeElement) element);
+         case RECORD -&gt; new RecordImpl(context, (TypeElement) element);
+         case CLASS -&gt; new ClassImpl(context, (TypeElement) element);
+         case INTERFACE -&gt; new InterfaceImpl(context, (TypeElement) element);
+         case METHOD, CONSTRUCTOR -&gt; new ExecutableImpl(context, ((ExecutableElement) element));
+         case ENUM_CONSTANT -&gt; new EnumConstantImpl(context, (VariableElement) element);
+         case FIELD -&gt; new FieldImpl(context, (VariableElement) element);
+         case PARAMETER -&gt; new ParameterImpl(context, (VariableElement) element);
+         case TYPE_PARAMETER -&gt; new GenericImpl(context, (TypeParameterElement) element);
+         case MODULE -&gt; new ModuleImpl(context, (ModuleElement) element);
+         case RECORD_COMPONENT -&gt; new RecordComponentImpl(context, (RecordComponentElement) element);
+         case OTHER, STATIC_INIT, INSTANCE_INIT, EXCEPTION_PARAMETER, RESOURCE_VARIABLE, BINDING_VARIABLE, LOCAL_VARIABLE -&gt;
+               throw new IllegalArgumentException("not implemented");
+      };
+   }
+
+   /**
+    * {@link TypeMirror}s represent the abstract code. {@code List&lt;T&gt;} for example.
+    *
+    * @see #getShadow(LangModelContext, Element)
+    */
+   static &lt;SHADOW extends Shadow&gt; SHADOW getShadow(LangModelContext context, TypeMirror typeMirror)
+   {
+      //noinspection unchecked
+      return (SHADOW) switch (typeMirror.getKind())
+      {
+         case BOOLEAN, BYTE, SHORT, INT, LONG, CHAR, FLOAT, DOUBLE -&gt; new PrimitiveImpl(context, (PrimitiveType) typeMirror);
+         case ARRAY -&gt; new ArrayImpl(context, (ArrayType) typeMirror);
+         case DECLARED -&gt; switch (getTypes(context).asElement(typeMirror).getKind())
+         {
+            case CLASS -&gt; new ClassImpl(context, ((DeclaredType) typeMirror));
+            case INTERFACE -&gt; new InterfaceImpl(context, (DeclaredType) typeMirror);
+            case RECORD -&gt; new RecordImpl(context, (DeclaredType) typeMirror);
+            case ANNOTATION_TYPE, ENUM -&gt; new DeclaredImpl(context, (DeclaredType) typeMirror);
+            default -&gt; throw new IllegalArgumentException("not implemented");
+         };
+         case WILDCARD -&gt; new WildcardImpl(context, (WildcardType) typeMirror);
+         case VOID -&gt; new VoidImpl(context, ((NoType) typeMirror));
+         case PACKAGE -&gt; new PackageImpl(context, (NoType) typeMirror);
+         case MODULE -&gt; new ModuleImpl(context, (NoType) typeMirror);
+         case NULL -&gt; new NullImpl(context, (NullType) typeMirror);
+         case TYPEVAR -&gt; new GenericImpl(context, ((TypeVariable) typeMirror));
+         case INTERSECTION -&gt; new IntersectionImpl(context, ((IntersectionType) typeMirror));
+         case EXECUTABLE, NONE -&gt; throw new IllegalArgumentException("bug in this api: executables should be created using elements");
+         case ERROR, OTHER, UNION -&gt; throw new IllegalArgumentException("not implemented");
+      };
+   }
+
+   static List&lt;AnnotationUsage&gt; getAnnotationUsages(LangModelContext context, List&lt;? extends AnnotationMirror&gt; annotationMirrors)
+   {
+      return AnnotationUsageImpl.from(context, annotationMirrors);
+   }
+
+   static javax.lang.model.element.AnnotationValue getAnnotationValue(AnnotationValue annotationValue)
+   {
+      return ((AnnotationValueImpl) annotationValue).getAnnotationValue();
+   }
+
+   static Types getTypes(LangModelContext context)
+   {
+      return ((LangModelContextImpl) context).getTypes();
+   }
+
+   static Elements getElements(LangModelContext context)
+   {
+      return ((LangModelContextImpl) context).getElements();
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">javax.annotation.processing</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.api.annotation_processing;
+
+import io.determann.shadow.api.Annotationable;
+import io.determann.shadow.api.lang_model.LangModelAdapter;
+import io.determann.shadow.api.lang_model.LangModelContext;
+import io.determann.shadow.api.shadow.Module;
+import io.determann.shadow.api.shadow.Package;
+import io.determann.shadow.api.shadow.Void;
+import io.determann.shadow.api.shadow.*;
+
+import javax.lang.model.element.*;
+import javax.lang.model.type.*;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
+import java.util.List;
+import java.util.Set;
+
+public interface AnnotationProcessingAdapter
+{
+   static AnnotationMirror getMirror(AnnotationUsage annotationUsage)
+   {
+      return LangModelAdapter.getMirror(annotationUsage);
+   }
+
+   static DeclaredType getType(Declared declared)
+   {
+      return LangModelAdapter.getType(declared);
+   }
+
+   static ArrayType getType(Array array)
+   {
+      return LangModelAdapter.getType(array);
+   }
+
+   static ExecutableType getType(Executable executable)
+   {
+      return LangModelAdapter.getType(executable);
+   }
+
+   static TypeMirror getType(Shadow shadow)
+   {
+      return LangModelAdapter.getType(shadow);
+   }
+
+   static TypeVariable getType(Generic generic)
+   {
+      return LangModelAdapter.getType(generic);
+   }
+
+   static IntersectionType getType(Intersection intersection)
+   {
+      return LangModelAdapter.getType(intersection);
+   }
+
+   static NoType getType(io.determann.shadow.api.shadow.Module module)
+   {
+      return LangModelAdapter.getType(module);
+   }
+
+   static NullType getType(Null aNull)
+   {
+      return LangModelAdapter.getType(aNull);
+   }
+
+   static NoType getType(io.determann.shadow.api.shadow.Package aPackage)
+   {
+      return LangModelAdapter.getType(aPackage);
+   }
+
+   static PrimitiveType getType(Primitive primitive)
+   {
+      return LangModelAdapter.getType(primitive);
+   }
+
+   static NoType getType(Void aVoid)
+   {
+      return LangModelAdapter.getType(aVoid);
+   }
+
+   static WildcardType getType(Wildcard wildcard)
+   {
+      return LangModelAdapter.getType(wildcard);
+   }
+
+   static Element getElement(Annotationable annotationable)
+   {
+      return LangModelAdapter.getElement(annotationable);
+   }
+
+   static TypeElement getElement(Declared declared)
+   {
+      return LangModelAdapter.getElement(declared);
+   }
+
+   static ExecutableElement getElement(Executable executable)
+   {
+      return LangModelAdapter.getElement(executable);
+   }
+
+   static TypeParameterElement getElement(Generic generic)
+   {
+      return LangModelAdapter.getElement(generic);
+   }
+
+   static ModuleElement getElement(io.determann.shadow.api.shadow.Module module)
+   {
+      return LangModelAdapter.getElement(module);
+   }
+
+   static PackageElement getElement(Package aPackage)
+   {
+      return LangModelAdapter.getElement(aPackage);
+   }
+
+   static RecordComponentElement getElement(RecordComponent recordComponent)
+   {
+      return LangModelAdapter.getElement(recordComponent);
+   }
+
+   static VariableElement getElement(Variable&lt;?&gt; variable)
+   {
+      return LangModelAdapter.getElement(variable);
+   }
+
+   static Module getModule(LangModelContext context, Element element)
+   {
+      return LangModelAdapter.getModule(context, element);
+   }
+
+   static String getName(Element element)
+   {
+      return LangModelAdapter.getName(element);
+   }
+
+   static String getJavaDoc(LangModelContext context, Element element)
+   {
+      return LangModelAdapter.getJavaDoc(context, element);
+   }
+
+   static List&lt;AnnotationUsage&gt; getAnnotationUsages(LangModelContext context, Element element)
+   {
+      return LangModelAdapter.getAnnotationUsages(context, element);
+   }
+
+   static List&lt;AnnotationUsage&gt; getDirectAnnotationUsages(LangModelContext context, Element element)
+   {
+      return LangModelAdapter.getDirectAnnotationUsages(context, element);
+   }
+
+   static Set&lt;io.determann.shadow.api.modifier.Modifier&gt; getModifiers(Element element)
+   {
+      return LangModelAdapter.getModifiers(element);
+   }
+
+   static io.determann.shadow.api.modifier.Modifier mapModifier(javax.lang.model.element.Modifier modifier)
+   {
+      return LangModelAdapter.mapModifier(modifier);
+   }
+
+   /**
+    * {@link Element}s represent a usage. so for example a field may have the type {@code List&lt;String&gt;}. When you want the resulting {@link Shadow}
+    * to represent {@code List&lt;String&gt;} and not just {@code List&lt;T&gt;} use the {@link Element} to create it.
+    *
+    * @see #getShadow(LangModelContext, TypeMirror)
+    */
+   static &lt;SHADOW extends Shadow&gt; SHADOW getShadow(LangModelContext context, Element element)
+   {
+      return LangModelAdapter.getShadow(context, element);
+   }
+
+   /**
+    * {@link TypeMirror}s represent the abstract code. {@code List&lt;T&gt;} for example.
+    *
+    * @see #getShadow(LangModelContext, Element)
+    */
+   static &lt;SHADOW extends Shadow&gt; SHADOW getShadow(LangModelContext context, TypeMirror typeMirror)
+   {
+      return LangModelAdapter.getShadow(context, typeMirror);
+   }
+
+   static List&lt;AnnotationUsage&gt; getAnnotationUsages(LangModelContext context, List&lt;? extends AnnotationMirror&gt; annotationMirrors)
+   {
+      return LangModelAdapter.getAnnotationUsages(context, annotationMirrors);
+   }
+
+   static javax.lang.model.element.AnnotationValue getAnnotationValue(AnnotationValue annotationValue)
+   {
+      return LangModelAdapter.getAnnotationValue(annotationValue);
+   }
+
+   static Types getTypes(LangModelContext context)
+   {
+      return LangModelAdapter.getTypes(context);
+   }
+
+   static Elements getElements(LangModelContext context)
+   {
+      return LangModelAdapter.getElements(context);
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">java.lang.reflect</summary>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.api.reflection;
+
+import io.determann.shadow.api.shadow.Array;
+import io.determann.shadow.api.shadow.Constructor;
+import io.determann.shadow.api.shadow.Executable;
+import io.determann.shadow.api.shadow.Field;
+import io.determann.shadow.api.shadow.Method;
+import io.determann.shadow.api.shadow.Module;
+import io.determann.shadow.api.shadow.Package;
+import io.determann.shadow.api.shadow.Parameter;
+import io.determann.shadow.api.shadow.RecordComponent;
+import io.determann.shadow.api.shadow.*;
+import io.determann.shadow.api.shadow.module.*;
+import io.determann.shadow.internal.reflection.NamedSupplier;
+import io.determann.shadow.internal.reflection.shadow.*;
+import io.determann.shadow.internal.reflection.shadow.module.*;
+
+import java.lang.Class;
+import java.lang.Enum;
+import java.lang.Void;
+import java.lang.module.ModuleDescriptor;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReference;
+import java.lang.reflect.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+public interface ReflectionAdapter
+{
+   public static &lt;SHADOW extends Shadow&gt; SHADOW getShadow(Class&lt;?&gt; aClass)
+   {
+      return getShadow(aClass, Collections.emptyList());
+   }
+
+   @SuppressWarnings("unchecked")
+   private static &lt;SHADOW extends Shadow&gt; SHADOW getShadow(Class&lt;?&gt; aClass, List&lt;Shadow&gt; genericTypes)
+   {
+      if (aClass.isPrimitive())
+      {
+         if (aClass.equals(Void.TYPE))
+         {
+            return (SHADOW) new VoidImpl();
+         }
+         return (SHADOW) new PrimitiveImpl(aClass);
+      }
+      if (aClass.isArray())
+      {
+         return (SHADOW) new ArrayImpl(aClass);
+      }
+      if (aClass.isRecord())
+      {
+         return (SHADOW) new RecordImpl(aClass, genericTypes);
+      }
+      if (aClass.isAnnotation() || aClass.isEnum())
+      {
+         return (SHADOW) new DeclaredImpl(aClass);
+      }
+      if (aClass.isInterface())
+      {
+         return (SHADOW) new InterfaceImpl(aClass, genericTypes);
+      }
+      return (SHADOW) new ClassImpl(aClass, genericTypes);
+   }
+
+   public static Package getShadow(java.lang.Package aPackage)
+   {
+      return new PackageImpl(new NamedSupplier&lt;&gt;(aPackage, java.lang.Package::getName));
+   }
+
+   public static Module getShadow(java.lang.Module module)
+   {
+      return new ModuleImpl(new NamedSupplier&lt;&gt;(module.getDescriptor(), ModuleDescriptor::name),
+                            Arrays.stream(module.getAnnotations()).map(ReflectionAdapter::getAnnotationUsage).toList());
+   }
+
+   public static Module getModuleShadow(String name)
+   {
+      return new ModuleImpl(new NamedSupplier&lt;&gt;(name,
+                                                () -&gt; ModuleFinder.ofSystem().find(name).orElseThrow().descriptor(),
+                                                ModuleDescriptor::name));
+   }
+
+   public static Module getShadow(ModuleReference moduleReference)
+   {
+      return new ModuleImpl(new NamedSupplier&lt;&gt;(moduleReference.descriptor(), ModuleDescriptor::name));
+   }
+
+   public static Shadow getShadow(Type type)
+   {
+      if (type instanceof ParameterizedType parameterizedType)
+      {
+         Type rawType = parameterizedType.getRawType();
+         if (rawType instanceof Class&lt;?&gt; aClass)
+         {
+            return getShadow(aClass, Arrays.stream(parameterizedType.getActualTypeArguments()).map(ReflectionAdapter::getShadow).toList());
+         }
+         throw new IllegalStateException();
+      }
+      if (type instanceof TypeVariable&lt;?&gt; typeVariable)
+      {
+         return new GenericImpl(typeVariable);
+      }
+      if (type instanceof Class&lt;?&gt; aClass)
+      {
+         return getShadow(aClass);
+      }
+      if (type instanceof WildcardType wildcardType)
+      {
+         return new WildcardImpl(wildcardType);
+      }
+      throw new IllegalStateException();
+   }
+
+   public static AnnotationUsage getAnnotationUsage(java.lang.annotation.Annotation annotation)
+   {
+      return new AnnotationUsageImpl(annotation);
+   }
+
+   public static Field getShadow(java.lang.reflect.Field field)
+   {
+      return new FieldImpl(field);
+   }
+
+   public static Method getShadow(java.lang.reflect.Method method)
+   {
+      return new ExecutableImpl(method);
+   }
+
+   public static Constructor getShadow(java.lang.reflect.Constructor&lt;?&gt; constructor)
+   {
+      return new ExecutableImpl(constructor);
+   }
+
+   public static RecordComponent getShadow(java.lang.reflect.RecordComponent recordComponent)
+   {
+      return new RecordComponentImpl(recordComponent);
+   }
+
+   public static Parameter getShadow(java.lang.reflect.Parameter parameter)
+   {
+      return new ParameterImpl(parameter);
+   }
+
+   public static Shadow getShadow(TypeVariable&lt;?&gt; typeVariable)
+   {
+      return new GenericImpl(typeVariable);
+   }
+
+   public static Requires getShadow(ModuleDescriptor.Requires requires)
+   {
+      return new RequiresImpl(requires);
+   }
+
+   public static Exports getShadow(ModuleDescriptor.Exports exports)
+   {
+      return new ExportsImpl(exports);
+   }
+
+   public static Opens getShadow(ModuleDescriptor.Opens opens)
+   {
+      return new OpensImpl(opens);
+   }
+
+   public static Provides getShadow(ModuleDescriptor.Provides provides)
+   {
+      return new ProvidesImpl(provides);
+   }
+
+   public static Uses getUsesShadow(String uses)
+   {
+      return new UsesImpl(uses);
+   }
+
+   public static Optional&lt;Declared&gt; getDeclaredShadow(String qualifiedName)
+   {
+      try
+      {
+         Class&lt;?&gt; aClass = Class.forName(qualifiedName);
+         return Optional.of(getShadow(aClass));
+      }
+      catch (ClassNotFoundException e)
+      {
+         return Optional.empty();
+      }
+   }
+
+   public static Executable getShadow(java.lang.reflect.Executable executable)
+   {
+      return new ExecutableImpl(executable);
+   }
+
+   public static Package getPackageShadow(String name)
+   {
+      return new PackageImpl(new NamedSupplier&lt;&gt;(name, () -&gt;
+      {
+         java.lang.Package aPackage = java.lang.Package.getPackage(name);
+         if (aPackage == null)
+         {
+            throw new IllegalArgumentException("Package \"" + name + "\" not found. The VM did not load it yet");
+         }
+         return aPackage;
+      }, java.lang.Package::getName));
+   }
+
+   public static EnumConstant getShadow(Enum&lt;?&gt; enumConstant)
+   {
+      try
+      {
+         return new EnumConstantImpl(enumConstant.getDeclaringClass().getField(enumConstant.name()));
+      }
+      catch (NoSuchFieldException e)
+      {
+         throw new RuntimeException(e);
+      }
+   }
+
+   public static Shadow getShadow(GenericDeclaration genericDeclaration)
+   {
+      if (genericDeclaration instanceof Class&lt;?&gt; aClass)
+      {
+         return getShadow(aClass);
+      }
+      if (genericDeclaration instanceof java.lang.reflect.Executable executable)
+      {
+         return getShadow(executable);
+      }
+      throw new IllegalStateException();
+   }
+
+   public static ModuleDescriptor.Exports getReflection(Exports exports)
+   {
+      return ((ExportsImpl) exports).getReflection();
+   }
+
+   public static ModuleDescriptor.Opens getReflection(Opens opens)
+   {
+      return ((OpensImpl) opens).getReflection();
+   }
+
+   public static ModuleDescriptor.Provides getReflection(Provides provides)
+   {
+      return ((ProvidesImpl) provides).getReflection();
+   }
+
+   public static ModuleDescriptor.Requires getReflection(Requires requires)
+   {
+      return ((RequiresImpl) requires).getReflection();
+   }
+
+   public static String getReflection(Uses uses)
+   {
+      return ((UsesImpl) uses).getReflection();
+   }
+
+   public static java.lang.annotation.Annotation getReflection(AnnotationUsage annotationUsage)
+   {
+      return ((AnnotationUsageImpl) annotationUsage).getAnnotationReflection();
+   }
+
+   public static Class&lt;?&gt; getReflection(Array array)
+   {
+      return ((ArrayImpl) array).getReflection();
+   }
+
+   public static Class&lt;?&gt; getReflection(Declared declared)
+   {
+      return ((DeclaredImpl) declared).getReflection();
+   }
+
+   public static java.lang.reflect.Field getReflection(EnumConstant enumConstant)
+   {
+      return ((ReflectionFieldImpl&lt;?&gt;) enumConstant).getReflection();
+   }
+
+   public static java.lang.reflect.Executable getReflection(Executable executable)
+   {
+      return ((ExecutableImpl) executable).getReflection();
+   }
+
+   public static java.lang.reflect.Field getReflection(Field field)
+   {
+      return ((ReflectionFieldImpl&lt;?&gt;) field).getReflection();
+   }
+
+   public static TypeVariable&lt;?&gt; getReflection(Generic generic)
+   {
+      return ((GenericImpl) generic).getReflection();
+   }
+
+   public static Type[] getReflection(Intersection intersection)
+   {
+      return ((IntersectionImpl) intersection).getReflection();
+   }
+
+   public static ModuleDescriptor getReflection(Module module)
+   {
+      return ((ModuleImpl) module).getReflection();
+   }
+
+   public static java.lang.Package getReflection(Package aPackage)
+   {
+      return ((PackageImpl) aPackage).getReflection();
+   }
+
+   public static java.lang.reflect.Parameter getReflection(Parameter parameter)
+   {
+      return ((ParameterImpl) parameter).getReflection();
+   }
+
+   public static java.lang.Class&lt;?&gt; getReflection(Primitive primitive)
+   {
+      return ((PrimitiveImpl) primitive).getReflection();
+   }
+
+   public static java.lang.reflect.RecordComponent getReflection(RecordComponent recordComponent)
+   {
+      return ((RecordComponentImpl) recordComponent).getReflection();
+   }
+
+   public static WildcardType getReflection(Wildcard wildcard)
+   {
+      return ((WildcardImpl) wildcard).getReflection();
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+</details>
+</div>
+</details>
+<details>
+<summary class="title">Better rendering of existing sources</summary>
+<div class="content">
+<div class="paragraph">
+<p>A simple method like this</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public abstract class MyClass {
+
+  @MyAnnotation
+  public abstract &lt;T&gt; T get(int index);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>can be rendered in the following ways</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rendering</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Shadow AOI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JDK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MyAnnotation
+public abstract &lt;T&gt; T get(int index);</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">render(method).declaration()</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MyAnnotation
+public &lt;T&gt; T get(int index) {
+}</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">render(method).declaration("//do stuff")</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">get()</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">render(method).invocation()</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">get(5413)</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">render(method).invocation("5413")</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">&lt;T&gt;get(int)</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">method.toString()</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">methodElement.toString()</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">&lt;T&gt;(int)T</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">methodMirror.toString()</code></pre>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<div class="title">Names can be rendered as</div>
+<ul>
+<li>
+<p>QualifiedNames</p>
+</li>
+<li>
+<p>SimpleNames</p>
+</li>
+<li>
+<p>WithoutNeedingImports (default)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>and a Callback can be registered for NameRenderedEvents to create for example imports.</p>
+</div>
+</div>
+</details>
+<div class="sect2">
+<h3 id="_currently_supported_are"><a class="anchor" href="#_currently_supported_are"></a>Currently Supported are:</h3>
+<div class="paragraph">
+<p><a href="Annotation%20Processing.html" class="xref page">Annotation Processing</a></p>
+</div>
+<div class="paragraph">
+<p><a href="java.lang.model.html" class="xref page">java.lang.model</a></p>
+</div>
+<div class="paragraph">
+<p><a href="Reflection.html" class="xref page">reflection</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_api_goals"><a class="anchor" href="#_api_goals"></a>API Goals</h3>
+<div class="sect3">
+<h4 id="_short_term"><a class="anchor" href="#_short_term"></a>Short-term</h4>
+<div class="paragraph">
+<p>Make annotation processing more accessible and easier to comprehend.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_long_term"><a class="anchor" href="#_long_term"></a>Long-term</h4>
+<div class="paragraph">
+<p>Provide an API for any kind of Meta-Programming. annotation processing, reflection, doclet etc.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_project_status"><a class="anchor" href="#_project_status"></a>Project status</h3>
+<div class="paragraph">
+<p>The Annotation Processing API is relativity stable.
+The Reflection API is missing some important parts, like invocations and needs more time.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+    <p>The Ui for this site is based in part on the <a href="https://gitlab.com/antora/antora-ui-default">Antora Default UI</a></p>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

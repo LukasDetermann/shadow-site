@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Annotation Processing :: Shadow Api</title>
+    <meta name="generator" content="Antora 3.1.7">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <a href="#">Shadow Api</a>
+            </div>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <a class="navbar-item" href="index.html">Home</a>
+                <a class="navbar-item" href="Annotation%20Processing.html">Implementations</a>
+                <a class="navbar-item" href="article/Meta%20Model.html">Articles</a>
+                <a class="navbar-item" href="https://github.com/LukasDetermann/shadow">
+                    <span class="icon">
+                        <svg aria-hidden="true" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 98 96">
+                            <path fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
+                                  fill="#fff"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header><div class="body">
+<div class="nav-container" data-component="Shadow-Api" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Shadow-Api</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Implementations</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="Annotation%20Processing.html">Annotation Processing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Reflection.html">reflection</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="java.lang.model.html">java.lang.model</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Articles</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="article/Meta%20Model.html">Meta Model Design</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Shadow-Api</a></li>
+    <li>Implementations</li>
+    <li><a href="Annotation%20Processing.html">Annotation Processing</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Annotation Processing</h1>
+<div class="sect1">
+<h2 id="_what_is_this"><a class="anchor" href="#_what_is_this"></a>What is this?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Annotation-processors run at compile time. They process representations of the %linenums code that is being compiled.
+They also can create new Files, including %linenums files, and raise errors or warnings.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Featureset 6/10</p>
+</li>
+<li>
+<p>Performance 10/10</p>
+</li>
+<li>
+<p>Correctness 9/10</p>
+</li>
+<li>
+<p>Usability 3/10</p>
+</li>
+<li>
+<p>Maintainability 9/10</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>Getting started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It&#8217;s normal annotation processing with a better API.
+The setup is the same.
+The differences only start when extending`io.determann.shadow.api.annotation_processing.ShadowProcessor` instead of <code>javax.annotation.processing.AbstractProcessor</code>.
+A good starting point for your own processor is <code>AnnotationProcessingContext.getAnnotatedWith(java.lang.String)</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup"><a class="anchor" href="#_setup"></a>Setup</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We will create everything you need to get started with your first annotation processor using maven in this setup.</p>
+</div>
+<div class="sect2">
+<h3 id="_1_two_modules"><a class="anchor" href="#_1_two_modules"></a>1) Two Modules</h3>
+<div class="paragraph">
+<p>The annotation processor must be compiled first.
+Create two maven modules.
+One having the code to process and one containing the annotation processor.</p>
+</div>
+<div class="listingblock">
+<div class="title">processor module</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;io.determann&lt;/groupId&gt;
+    &lt;artifactId&gt;processor-example&lt;/artifactId&gt;
+    &lt;version&gt;0.2.0&lt;/version&gt;
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">processed module</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;io.determann&lt;/groupId&gt;
+    &lt;artifactId&gt;processed-example&lt;/artifactId&gt;
+    &lt;version&gt;0.2.0&lt;/version&gt;
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_dependencies"><a class="anchor" href="#_2_dependencies"></a>2) Dependencies</h3>
+<div class="listingblock">
+<div class="title">The processor needs to depend on the <code>shadow-api</code></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">        &lt;dependency&gt;
+            &lt;groupId&gt;io.determann&lt;/groupId&gt;
+            &lt;artifactId&gt;shadow&lt;/artifactId&gt;
+            &lt;version&gt;0.2.0&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">And the processed module needs to depend on the processor module</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">        &lt;dependency&gt;
+            &lt;groupId&gt;io.determann&lt;/groupId&gt;
+            &lt;artifactId&gt;processor-example&lt;/artifactId&gt;
+            &lt;version&gt;0.2.0&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_3_processor_paths"><a class="anchor" href="#_3_processor_paths"></a>3) Processor paths</h3>
+<div class="listingblock">
+<div class="title">The module being processed needs to know the module it&#8217;s processed by</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.8.1&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;annotationProcessorPaths&gt;
+                        &lt;path&gt;
+                            &lt;groupId&gt;io.determann&lt;/groupId&gt;
+                            &lt;artifactId&gt;processor-example&lt;/artifactId&gt;
+                            &lt;version&gt;0.2.0&lt;/version&gt;
+                        &lt;/path&gt;
+                    &lt;/annotationProcessorPaths&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_4_disable_annotation_processing"><a class="anchor" href="#_4_disable_annotation_processing"></a>4) Disable annotation processing</h3>
+<div class="listingblock">
+<div class="title">Disable annotation processing in the processor module, otherwise the annotation processor would be used to process itself</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.8.1&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;%linenums&gt;17&lt;/%linenums&gt;
+                    &lt;target&gt;17&lt;/target&gt;
+                    &lt;!--don't compile the annotation processor using the annotation processor--&gt;
+                    &lt;compilerArgument&gt;-proc:none&lt;/compilerArgument&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_5_the_processor_itself"><a class="anchor" href="#_5_the_processor_itself"></a>5) The processor itself</h3>
+<div class="listingblock">
+<div class="title">Extend <code>ShadowProcessor</code> for your own processor and override <code>process()</code></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.determann.shadow.api.annotation_processing.AnnotationProcessingContext;
+import io.determann.shadow.api.annotation_processing.ShadowProcessor;
+
+public class MyProcessor extends ShadowProcessor
+{
+   @Override
+   public void process(final AnnotationProcessingContext context) {
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_6_register_this_processor"><a class="anchor" href="#_6_register_this_processor"></a>6) Register this processor</h3>
+<div class="listingblock">
+<div class="title">Create a file in <code>src/main/re%linenumss/META-INF/services/</code> called <code>javax.annotation.processing.Processor</code> and add your qualified path</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">io.determann.shadow.example.processor.MyProcessor</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_annotation"><a class="anchor" href="#_7_annotation"></a>7) Annotation</h3>
+<div class="listingblock">
+<div class="title">Now create an Annotation to process in the processor module</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public @interface MyAnnotation {}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_process"><a class="anchor" href="#_8_process"></a>8) Process</h3>
+<div class="listingblock">
+<div class="title">And finally process anything annotated with that annotation</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.determann.shadow.api.annotation_processing.AnnotationProcessingContext;
+import io.determann.shadow.api.annotation_processing.ShadowProcessor;
+
+public class MyProcessor extends ShadowProcessor
+{
+   @Override
+   public void process(final AnnotationProcessingContext context) {
+      for (Shadow shadow : context.getAnnotatedWith("org.example.MyAnnotation").all()) {
+      }
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simple_builder_example"><a class="anchor" href="#_simple_builder_example"></a>Simple Builder Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title">An annotation to mark classes</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Target(ElementType.TYPE)
+public @interface BuilderPattern {}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">A Processor creating a simple Builder companion object</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.builder;
+
+import io.determann.shadow.api.annotation_processing.AnnotationProcessingContext;
+import io.determann.shadow.api.annotation_processing.ShadowProcessor;
+import io.determann.shadow.api.property.MutableProperty;
+import io.determann.shadow.api.shadow.Class;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.uncapitalize;
+
+/**
+ * Builds a companion Builder class for each annotated class
+ */
+public class ShadowBuilderProcessor extends ShadowProcessor
+{
+   @Override
+   public void process(final AnnotationProcessingContext annotationProcessingContext)
+   {
+      //iterate over every class annotated with the BuilderPattern annotation
+      for (Class aClass : annotationProcessingContext.getAnnotatedWith("io.determann.shadow.builder.BuilderPattern").classes())
+      {
+         String toBuildQualifiedName = aClass.getQualifiedName();
+         String builderQualifiedName = toBuildQualifiedName + "ShadowBuilder";//qualifiedName of the companion builder class
+         String builderSimpleName = aClass.getName() + "ShadowBuilder";//simpleName of the companion builder class
+         String builderVariableName = uncapitalize(builderSimpleName);
+
+         //create a record holding the code needed to render a property in the builder
+         List&lt;BuilderElement&gt; builderElements = aClass.getMutableProperties()
+                                                      .stream()
+                                                      .map(property -&gt; renderProperty(builderSimpleName,
+                                                                                      builderVariableName,
+                                                                                      property))
+                                                      .toList();
+
+         //writes the builder
+         annotationProcessingContext.writeAndCompileSourceFile(builderQualifiedName,
+                                                               renderBuilder(aClass,
+                                                                             toBuildQualifiedName,
+                                                                             builderSimpleName,
+                                                                             builderVariableName,
+                                                                             builderElements));
+      }
+   }
+
+   /**
+    * renders a companion builder class
+    */
+   private String renderBuilder(final Class aClass,
+                                final String toBuildQualifiedName,
+                                final String builderSimpleName,
+                                final String builderVariableName,
+                                final List&lt;BuilderElement&gt; builderElements)
+   {
+      String fields = builderElements.stream()
+                                     .map(BuilderElement::field)
+                                     .collect(Collectors.joining("\n\n"));
+
+      String mutators = builderElements.stream()
+                                       .map(BuilderElement::mutator)
+                                       .collect(Collectors.joining("\n\n"));
+
+      String setterInvocations = builderElements.stream()
+                                                .map(BuilderElement::toBuildSetter)
+                                                .collect(Collectors.joining("\n\n"));
+      return """
+            package %1$s;
+                  
+            public class %2$s{
+               %3$s
+                  
+            %4$s
+                  
+               public %5$s build() {
+                  %5$s %6$s = new %5$s();
+                  %7$s
+                  return %6$s;
+               }
+            }
+            """.formatted(aClass.getPackage().getQualifiedName(),
+                          builderSimpleName,
+                          fields,
+                          mutators,
+                          toBuildQualifiedName,
+                          builderVariableName,
+                          setterInvocations);
+   }
+
+   /**
+    * Creates a {@link BuilderElement} for each property of the annotated pojo
+    */
+   private BuilderElement renderProperty(final String builderSimpleName,
+                                         final String builderVariableName,
+                                         final MutableProperty property)
+   {
+      String propertyName = property.getName();
+      String type = property.getType().toString();
+      String field = "private " + type + " " + propertyName + ";";
+
+      String mutator = """
+               public %1$s with%2$s(%3$s %4$s) {
+                  this.%4$s = %4$s;
+                  return this;
+               }
+            """.formatted(builderSimpleName,
+                          capitalize(propertyName),
+                          type,
+                          propertyName);
+
+      String toBuildSetter = builderVariableName + "." + property.getSetter().getName() + "(" + propertyName + ");";
+
+      return new BuilderElement(field, mutator, toBuildSetter);
+   }
+
+   /**
+    * Used to render the code needed to render a property in the builder
+    *
+    * @param field ones rendered will hold the values being used to build the pojo
+    * @param mutator ones rendered will set the value of the {@link #field}
+    * @param toBuildSetter ones rendered will modify the build pojo
+    */
+   private record BuilderElement(String field,
+                                 String mutator,
+                                 String toBuildSetter) {}
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">For a simple pojo like</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.builder;
+
+import java.util.Objects;
+
+@BuilderPattern
+public class Customer
+{
+   private String name;
+
+   public String getName()
+   {
+      return name;
+   }
+
+   public void setName(String name)
+   {
+      this.name = name;
+   }
+
+   @Override
+   public boolean equals(Object o)
+   {
+      return this == o || o instanceof Customer customer &amp;&amp; Objects.equals(getName(), customer.getName());
+   }
+
+   @Override
+   public int hashCode()
+   {
+      return Objects.hash(getName());
+   }
+
+   @Override
+   public String toString()
+   {
+      return "Customer{" +
+             "name='" + name + '\'' +
+             '}';
+   }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">This builder would be generated</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class CustomerShadowBuilder{
+   private java.lang.String name;
+
+   public CustomerShadowBuilder withName(java.lang.String name) {
+      this.name = name;
+      return this;
+   }
+
+   public io.determann.shadow.builder.Customer build() {
+     io.determann.shadow.builder.Customer customer = new io.determann.shadow.builder.Customer();
+      customer.setName(name);
+      return customer;
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+    <p>The Ui for this site is based in part on the <a href="https://gitlab.com/antora/antora-ui-default">Antora Default UI</a></p>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
