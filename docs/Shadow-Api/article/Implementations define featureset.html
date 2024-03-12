@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>How can Implementations define the featureset? :: Shadow Api</title>
+    <meta name="generator" content="Antora 3.1.7">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <a href="#">Shadow Api</a>
+            </div>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <a class="navbar-item" href="../index.html">Home</a>
+                <a class="navbar-item" href="../Annotation%20Processing.html">Implementations</a>
+                <a class="navbar-item" href="Meta%20Model.html">Articles</a>
+                <a class="navbar-item" href="https://github.com/LukasDetermann/shadow">
+                    <span class="icon">
+                        <svg aria-hidden="true" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 98 96">
+                            <path fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
+                                  fill="#fff"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header><div class="body">
+<div class="nav-container" data-component="Shadow-Api" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../index.html">Shadow-Api</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Implementations</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../Annotation%20Processing.html">Annotation Processing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../Reflection.html">reflection</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../java.lang.model.html">java.lang.model</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Articles</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Meta%20Model.html">Meta Model Design</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="Implementations%20define%20featureset.html">How can Implementations define the featureset?</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Shadow-Api</a></li>
+    <li>Articles</li>
+    <li><a href="Implementations%20define%20featureset.html">How can Implementations define the featureset?</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">How can Implementations define the featureset?</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is the result of
+<a href="Meta%20Model.html" class="xref page">Meta Model Design</a>
+The goal was to change the metamodel Api in such a way that implementations can define the featureset.
+So that ech Implementation can decide what e.g. a <code>Method</code> can do.</p>
+</div>
+<div class="paragraph">
+<p>Goals in on order</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>discoverability</p>
+</li>
+<li>
+<p>flexibility</p>
+</li>
+<li>
+<p>barrier of entry</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_previous"><a class="anchor" href="#_previous"></a>previous</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Query&lt;TO_QUERY, RESULT&gt; {
+
+}
+
+public interface Queryable {
+   &lt;TO_QUERY, RESULT&gt; RESULT getOrThrow(Query&lt;TO_QUERY, RESULT&gt; query);
+
+   &lt;TO_QUERY, RESULT&gt; Optional&lt;RESULT&gt; get(Query&lt;TO_QUERY, RESULT&gt; query);
+}
+
+public interface Shadow extends Queryable {
+   @Override
+   &lt;TO_QUERY, RESULT&gt; RESULT getOrThrow(Query&lt;TO_QUERY, RESULT&gt; query);
+
+   @Override
+   &lt;TO_QUERY, RESULT&gt; Optional&lt;RESULT&gt; get(Query&lt;TO_QUERY, RESULT&gt; query);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The only positive about this solution is, its communicates the intention very clearly on an Entity–relationship model.
+In practice this api would allow querying of anything on any Type.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_static_getter"><a class="anchor" href="#_static_getter"></a>Static Getter</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static String getName(Nameable nameable) {
+
+}
+
+static {
+   Method method = null;
+
+   String name = getName(method);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is the simples possible solution.
+It&#8217;s just a static getter.
+The discoverability is poor.
+The caller has to know the type hierarchy to know that <code>getName()</code> can be called with methods.</p>
+</div>
+<div class="paragraph">
+<p><code>For this Object &#8594; get the name</code> should be preferred over <code>get the name &#8594; for this Object</code>
+Its more "natural this way", works better with type inference and gives the opportunity for good discoverability via IDE autocomplete.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_static_method_for_query"><a class="anchor" href="#_static_method_for_query"></a>Static Method for Query</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Query&lt;TO_QUERY, RESULT&gt; {}
+
+public static  &lt;TO_QUERY, RESULT&gt; RESULT getOrThrow(TO_QUERY toQuery, Query&lt;TO_QUERY, RESULT&gt; query) {
+
+}
+
+public static Query&lt;Nameable, String&gt; name() {
+
+}
+
+static {
+
+   Method method = null;
+
+    String s = getOrThrow(method, name());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here the direction is turned to <code>For this Object &#8594; get the name</code>, but the discoverability can still be improved.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_a_query_can_be_a_function"><a class="anchor" href="#_a_query_can_be_a_function"></a>A Query can be a Function</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Query&lt;TO_QUERY, RESULT&gt; extends Function&lt;TO_QUERY, RESULT&gt; {
+
+   @Override
+   public RESULT apply(TO_QUERY toQuery);
+}
+
+public static Query&lt;Nameable, String&gt; name() {
+
+}
+
+static
+{
+   Method method = null;
+
+   String name = name().apply(method);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A Query is functionality equivalent to a <code>Function</code>.
+If the <code>Query</code> is the "active" part its back to <code>get the name &#8594; for this Object</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_duplicate_model"><a class="anchor" href="#_duplicate_model"></a>Duplicate Model</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static ReflectionNameableQueryable query(Nameable nameable) {
+
+}
+
+public static ReflectionMethodQueryable query(Method method) {
+
+}
+
+public interface NameableQueryable
+{
+   public String getName();
+}
+
+public interface MethodQueryable extends NameableQueryable
+{
+   Return getReturn();
+}
+
+static
+{
+   Method method = null;
+
+   String name = query(method).getName();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can just duplicate the model or subsets of it and use static factory methods to map from one to the other.
+This offers the best possible discoverability.
+The only downside is that implementing support e.g. reflection is comparative more work.
+Which is not that big of a problem.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_generic"><a class="anchor" href="#_generic"></a>Generic</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Query&lt;TO_QUERY, RESULT&gt;
+{
+   public static &lt;TO_QUERY extends T, T&gt; Queryable&lt;T&gt; query(TO_QUERY toQuery)
+   {
+   }
+}
+
+public interface Queryable&lt;TO_QUERY&gt;
+{
+   &lt;RESULT&gt; RESULT getOrThrow(Query&lt;TO_QUERY, RESULT&gt; query);
+
+   &lt;RESULT&gt; Optional&lt;RESULT&gt; get(Query&lt;TO_QUERY, RESULT&gt; query);
+}
+
+public static Query&lt;Nameable, String&gt; name() {}
+
+static {
+
+   Method method = null;
+
+   //compiles
+   Queryable&lt;Nameable&gt; query = Query.query(method);
+   query.get(name());
+
+   //compiles
+   Optional&lt;String&gt; s = Query.&lt;Method, Nameable&gt;query(method).get(name());
+
+   //doesn't compile
+   Optional&lt;String&gt; s1 = Query.query(method).get(name());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here <code>Query</code> has a static factory with generics that give flexibility for supertypes.
+So could a <code>Query</code> for <code>Nameable</code> be applied to a <code>Method</code>, because <code>Method</code> extends <code>Nameable</code>.
+The Query call has two parts.
+First the Object to query gets wrapped in a <code>Queryable</code> which can be queried when the types match.
+This works but, but type inference is not strong enough.
+Making it annoying and unintuitive to use.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion"><a class="anchor" href="#_conclusion"></a>Conclusion</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>All are flexible</p>
+</li>
+<li>
+<p>Duplicate Model and Generic provide the best discoverability</p>
+</li>
+<li>
+<p>Duplicate Model has the lowest barrier of entry</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+    <p>The Ui for this site is based in part on the <a href="https://gitlab.com/antora/antora-ui-default">Antora Default UI</a></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
