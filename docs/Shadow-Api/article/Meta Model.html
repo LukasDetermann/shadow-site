@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Meta Model Design :: Shadow Api</title>
+    <title>Meta Model :: Shadow Api</title>
     <meta name="generator" content="Antora 3.1.7">
     <link rel="stylesheet" href="../../_/css/site.css">
   </head>
@@ -69,10 +69,7 @@
     <span class="nav-text">Articles</span>
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="Meta%20Model.html">Meta Model Design</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="Implementations%20define%20featureset.html">How can Implementations define the featureset?</a>
+    <a class="nav-link" href="Meta%20Model.html">Meta Model</a>
   </li>
 </ul>
   </li>
@@ -92,7 +89,7 @@
   <ul>
     <li><a href="../index.html">Shadow-Api</a></li>
     <li>Articles</li>
-    <li><a href="Meta%20Model.html">Meta Model Design</a></li>
+    <li><a href="Meta%20Model.html">Meta Model</a></li>
   </ul>
 </nav>
 </div>
@@ -101,38 +98,66 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Meta Model Design</h1>
+<h1 class="page">Meta Model</h1>
 <div class="sect1">
-<h2 id="_goal"><a class="anchor" href="#_goal"></a>Goal</h2>
+<h2 id="_implementations_define_the_featureset"><a class="anchor" href="#_implementations_define_the_featureset"></a>Implementations define the featureset</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are types forms of Meta-Programming in java.
-Reflection and Annotation-Processing have the same level of detail for now.
-Both start at java-modules and end at method signatures.
-With <a href="https://openjdk.org/projects/babylon/">Project Babylons</a> code-reflection that will change that.
-The goal of the Shadow-Api is to write one fits all Api with each implementation being a separate artifact.
-As an example, I will use the Method <code>public Optional&lt;FuncOp&gt; getCodeModel()</code> that is proposed to be added to <code>java.lang.reflect.Method</code>.</p>
+<p>Meta programming is hard.
+One of the reasons is that there are a lot of different apis each with their own philosophy, design, quirks limitations and pitfalls.
+This leads to a high barrier of entry and a lot of cognitive complexity.
+There are some projects implemented with technology <strong>A</strong> that should use <strong>B</strong>, but are unable to switch.
+This project aims to provide one api for meta programming.
+At the center of it is the <strong>meta model api</strong> that represents the source code.</p>
 </div>
-<div class="sect2">
-<h3 id="_components"><a class="anchor" href="#_components"></a>Components</h3>
+<div class="paragraph">
+<p>The project is separated into multiple maven modules.
+There is a core module that contains the <strong>meta model api</strong> and functionality build on top like rendering.
+And there are multiple modules that implement the api defined in the core module for different technologies.
+There is one implementation module for reflection and one for annotation processing for example.</p>
+</div>
+<div class="paragraph">
+<p>The <strong>meta model api</strong> is consumed by two clients.
+There is the user of a specific meta programing api like reflection.
+And features for every meta programming type like rendering.</p>
+</div>
 <div class="ulist">
+<div class="title">When using a specific type of meta programming the api needs to:</div>
 <ul>
 <li>
-<p><strong>Core</strong> is the module containing the Model Api and functionality that can be used with any implementation like Renderer and Converter</p>
+<p>be feature complete</p>
 </li>
 <li>
-<p><strong>Annotation-Processing</strong> depends on <strong>core</strong></p>
+<p>be discoverable</p>
 </li>
 <li>
-<p><strong>Reflection</strong> depends on <strong>core</strong></p>
+<p>have a low barrier of entry</p>
 </li>
 </ul>
 </div>
+<div class="ulist">
+<div class="title">Features build on top of this api like rendering need</div>
+<ul>
+<li>
+<p>only a subset of features</p>
+</li>
+<li>
+<p>consistency in the api</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>All features of the reflection api and the annotation processing api for example should be supported.
+They currently have similar featuresets, but not the same.
+The difference will become grater with <a href="https://openjdk.org/projects/babylon/">Project Babylon</a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>This post explores how different implementations of the same api can have different featuresets.</strong></p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_solution_1_one_api"><a class="anchor" href="#_solution_1_one_api"></a>Solution 1: One Api</h2>
+<h2 id="_one_api"><a class="anchor" href="#_one_api"></a>One Api</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Provide all the functionality in the core api. With implementations supporting the subset they can.</p>
@@ -140,19 +165,19 @@ As an example, I will use the Method <code>public Optional&lt;FuncOp&gt; getCode
 <div class="listingblock">
 <div class="title">core</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@interface Supported
-{
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@interface Supported {
+
    Implementation[] value();
 }
 
-enum Implementation
-{
+enum Implementation {
+
    REFLECTION,
    ANNOTATION_PROCESSING
 }
 
-public interface Method
-{
+public interface Method {
+
    @Supported({Implementation.ANNOTATION_PROCESSING, Implementation.REFLECTION})
    String getName();
 
@@ -162,52 +187,51 @@ public interface Method
 </div>
 </div>
 <div class="listingblock">
-<div class="title">reflection</div>
+<div class="title">implementation(reflection)</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class ReflectionMethodImpl implements Method
-{
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class ReflectionMethodImpl implements Method {
+
    private final java.lang.reflect.Method method;
 
-   public ReflectionMethodImpl(java.lang.reflect.Method method)
-   {
+   public ReflectionMethodImpl(java.lang.reflect.Method method) {
+
       this.method = method;
    }
 
    @Override
-   public String getName()
-   {
+   public String getName() {
+
       return method.getName();
    }
 
    @Override
-   public Optional&lt;FuncOp&gt; getCodeModel()
-   {
+   public Optional&lt;FuncOp&gt; getCodeModel() {
+
       return method.getCodeModel();
    }
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Annotation Processing</div>
+<div class="title">implementation(Annotation Processing)</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class AnnotationProcessingMethodImpl implements Method
-{
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class AnnotationProcessingMethodImpl implements Method {
+
    private final ExecutableElement executableElement;
 
-   public AnnotationProcessingMethodImpl(ExecutableElement executableElement)
-   {
+   public AnnotationProcessingMethodImpl(ExecutableElement executableElement) {
       this.executableElement = executableElement;
    }
 
    @Override
-   public String getName()
-   {
+   public String getName() {
+
       return executableElement.getSimpleName().toString();
    }
 
    @Override
-   public Optional&lt;FuncOp&gt; getCodeModel()
-   {
+   public Optional&lt;FuncOp&gt; getCodeModel() {
+
       throw new NotImplementedException();
    }
 }</code></pre>
@@ -235,7 +259,7 @@ public interface Method
 </div>
 </div>
 <div class="sect1">
-<h2 id="_solution_2_inheritance"><a class="anchor" href="#_solution_2_inheritance"></a>Solution 2: Inheritance</h2>
+<h2 id="_inheritance"><a class="anchor" href="#_inheritance"></a>Inheritance</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The core api contains only functionality every implementation can use.
@@ -244,23 +268,28 @@ Implementations extend the model to provide additional functionality.</p>
 <div class="listingblock">
 <div class="title">core</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface Method
-{
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface Method {
+
    String getName();
+}
+
+interface Class&lt;METHOD extends Method&gt; {
+
+   List&lt;METHOD&gt; getMethods();
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">reflection</div>
+<div class="title">implementation(reflection)</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface ReflectionMethod extends Method
-{
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface ReflectionMethod extends Method {
+
    Optional&lt;FuncOp&gt; getCodeModel();
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Annotation Processing</div>
+<div class="title">implementation(Annotation Processing)</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface AnnotationProcessingMethod extends Method {}</code></pre>
 </div>
@@ -277,13 +306,24 @@ Implementations extend the model to provide additional functionality.</p>
 <p>good separation of concerns</p>
 </li>
 <li>
-<p>The implementation would need many generics. Class for example needs the type of methods it returns.
-And when new core functionality gets added there maybe a need for an additional generic-parameter breaking every implementation and any code dependent on them</p>
+<p>Breaks all clients with every new language feature. Class for example needs the type of methods it returns.
+And when new core functionality gets added there maybe a need for an additional generic-parameter breaking every implementation and any code dependent on them.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface Class&lt;METHOD extends Method&gt;
-{
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface NewFeature{}
+
+interface Class&lt;METHOD extends Method, NEW_FEATURE extends NewFeature&gt; {
+
    List&lt;METHOD&gt; getMethods();
+
+   NEW_FEATURE getNewFeature();
+}
+static {
+   //adding a new generic would break all clients
+   //they would go from
+   Class&lt;Method&gt; original = null;
+   //to
+   Class&lt;Method, NewFeature&gt; newMethod = null;
 }</code></pre>
 </div>
 </div>
@@ -293,73 +333,260 @@ And when new core functionality gets added there maybe a need for an additional 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_solution_3_accessors_in_implementation"><a class="anchor" href="#_solution_3_accessors_in_implementation"></a>Solution 3: Accessors in Implementation</h2>
+<h2 id="_static_getter"><a class="anchor" href="#_static_getter"></a>Static Getter</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Move Accessors to the Implementations, so they can define the featureset.</p>
-</div>
-<div class="listingblock">
-<div class="title">core</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface Query&lt;FROM, RESULT&gt; {}
-
-interface Method
-{
-   &lt;RESULT&gt; RESULT getOrThrow(Query&lt;Method, RESULT&gt; query);
-}</code></pre>
-</div>
-</div>
 <div class="listingblock">
 <div class="title">reflection</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface ReflectionQueries
-{
-   public static Query&lt;Method, String&gt; name()
-   {
-      return null;//to implement
-   }
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static String getName(Nameable nameable) {
 
-   public static Query&lt;Method, FuncOp&gt; funcOp()
-   {
-      return null;//to implement
-   }
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Annotation Processing</div>
+<div class="title">implementation</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">interface AnnotationProcessingQueries
-{
-   public static Query&lt;Method, String&gt; name()
-   {
-      return null;//to implement
-   }
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">static {
+
+   Method method = null;
+   String name = getName(method);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is the simples possible solution where implementations define the featureset.
+Each implementation has their own static getter.
+The discoverability is poor.
+The caller has to know that method extends Nameable to know that <code>getName()</code> can be called.</p>
+</div>
+<div class="paragraph">
+<p><code>For this Object &#8594; get the name</code> should be preferred over <code>get the name &#8594; for this Object</code>
+Its more "natural this way" and generally provides better discoverability for example via IDE autocomplete.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_static_method_for_query"><a class="anchor" href="#_static_method_for_query"></a>Static Method for Query</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title">core</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Query&lt;TO_QUERY, RESULT&gt; {}
+
+public static  &lt;TO_QUERY, RESULT&gt; RESULT getOrThrow(TO_QUERY toQuery, Query&lt;TO_QUERY, RESULT&gt; query) {
+
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Usage</div>
+<div class="title">implementation</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Method method = null;
-String name = method.getOrThrow(ReflectionQueries.name());</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static Query&lt;Nameable, String&gt; name() {
+
+}</code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>risk of inconsistent implementations</p>
-</li>
-<li>
-<p>Query based apis are not that common and people are therefore less comfortable with them</p>
-</li>
-<li>
-<p>changes in one implementation don&#8217;t affect other implementations in any way</p>
-</li>
-<li>
-<p>good separation of concerns</p>
-</li>
-</ul>
+<div class="listingblock">
+<div class="title">usage</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">static {
+
+    Method method = null;
+    String s = getOrThrow(method, name());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here the direction is turned to <code>For this Object &#8594; get the name</code>, but the discoverability can still be improved.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_a_query_can_be_a_function"><a class="anchor" href="#_a_query_can_be_a_function"></a>A Query can be a Function</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title">core</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Query&lt;TO_QUERY, RESULT&gt; extends Function&lt;TO_QUERY, RESULT&gt; {
+
+   @Override
+   public RESULT apply(TO_QUERY toQuery);
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">implementation</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static Query&lt;Nameable, String&gt; name() {
+
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">usage</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">static {
+
+   Method method = null;
+   String name = name().apply(method);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A Query is functionality equivalent to a <code>Function</code>.
+If the <code>Query</code> is the "active" part its back to <code>get the name &#8594; for this Object</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_duplicate_model"><a class="anchor" href="#_duplicate_model"></a>Duplicate Model</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title">implementation(reflection)</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static ReflectionNameable query(Nameable nameable) {
+
+}
+
+public static ReflectionMethod query(Method method) {
+
+}
+
+public interface ReflectionNameable {
+   public String getName();
+}
+
+public interface ReflectionMethod extends ReflectionNameable {
+
+   Return getReturn();
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">usage</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">static {
+
+   Method method = null;
+   String name = query(method).getName();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can just duplicate the model or subsets of it and use static factory methods to map from one to the other.
+This offers the best possible discoverability.
+The only downside is that implementation is a lot of work.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_companions"><a class="anchor" href="#_companions"></a>Companions</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title">core</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Executable&lt;T extends ExecutableQuery&gt; {
+}
+
+public interface Method&lt;T extends MethodQuery&gt; extends Executable&lt;T&gt; {
+}
+
+public interface ExecutableQuery {
+}
+
+public interface MethodQuery extends ExecutableQuery {
+
+   public void getName();
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">implementation(reflection)</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface ReflectionExecutableQuery extends ExecutableQuery {
+}
+
+public interface ReflectionMethodQuery extends ReflectionExecutableQuery,
+                                               MethodQuery {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When moving the methods to a companion object the model works perfectly.
+Problems occur when working with a nonspecific model.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Converter {
+
+   static &lt;T&gt; ExecutableConverter convert(Executable&lt;T extends ExecutableQuery&gt; executable) {
+      //implementation
+   }
+}
+public interface ExecutableConverter&lt;T&gt; {
+
+   &lt;M extends ExecutableQuery&gt; Method&lt;M&gt; toMethod();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For a <code>Executable&lt;ReflectionExecutableQuery&gt;</code> <code>Method&lt;ReflectionMethodQuery&gt;</code> can not be returned.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_generic"><a class="anchor" href="#_generic"></a>Generic</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title">core</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Query&lt;TO_QUERY, RESULT&gt; {
+
+   public static &lt;TO_QUERY extends T, T&gt; Queryable&lt;T&gt; query(TO_QUERY toQuery) {
+   }
+}
+
+public interface Queryable&lt;TO_QUERY&gt; {
+
+   &lt;RESULT&gt; RESULT getOrThrow(Query&lt;TO_QUERY, RESULT&gt; query);
+
+   &lt;RESULT&gt; Optional&lt;RESULT&gt; get(Query&lt;TO_QUERY, RESULT&gt; query);
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">implementation</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static Query&lt;Nameable, String&gt; name() {}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">usage</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">static {
+
+   Method method = null;
+
+   //compiles
+   Queryable&lt;Nameable&gt; query = Query.query(method);
+   query.get(name());
+
+   //compiles
+   Optional&lt;String&gt; s = Query.&lt;Method, Nameable&gt;query(method).get(name());
+
+   //doesn't compile
+   Optional&lt;String&gt; s1 = Query.query(method).get(name());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here <code>Query</code> has a static factory with generics that give flexibility for supertypes.
+So could a <code>Query</code> for <code>Nameable</code> be applied to a <code>Method</code>, because <code>Method</code> extends <code>Nameable</code>.
+The Query call has two parts.
+First the Object to query gets wrapped in a <code>Queryable</code> which can be queried when the types match.
+This works but, but target type inference is limited for chain methods calls.
+I am not aware of any planed jdk enhancements this for this behavior.
+In this state the api is annoying and unintuitive to use.</p>
 </div>
 </div>
 </div>
@@ -367,39 +594,53 @@ String name = method.getOrThrow(ReflectionQueries.name());</code></pre>
 <h2 id="_conclusion"><a class="anchor" href="#_conclusion"></a>Conclusion</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The circular dependencies of Solution 1 make it a no-go in my opinion.
-There are about 10 planned implementations.
-With each new implementations the circular dependencies would become more annoying.</p>
+<p>The requirements of the two clients are so different that two apis are beneficial.</p>
 </div>
 <div class="paragraph">
-<p>The rist of needing to add new generics to the core model, like solution 2 demands, is too high.
-Especially when there is already talk about new types.</p>
+<p>The preferred api for specific meta programming implementations like reflection is "Duplicate Model".
+It provides the best discoverability together with "Generic" and has the lowest barrier of entry.
+This can not be used for common features as there are simply no methods to call in the core module.</p>
 </div>
 <div class="paragraph">
-<p>Solution 3 seems to be the most promising from a maintainability standpoint.
-It would even enable implementations support new jdk features if the core becomes unmaintained.
-<code>method.getOrThrow(ReflectionQueries.newJdkFeature())</code>
-It could be a good idea to use two Api styles for this one Api.
-Solution 1 for thinks that are very unlikely to change like <code>method.getName()</code>
-and a Query Api for anything else.
-An inconsistent Api may not be worth it.</p>
+<p>For them, I landed on a variant of "Static Method for Query" just with an SPI.</p>
 </div>
-<div class="paragraph">
-<p><strong>Solution 3 seems to be the right one</strong></p>
+<div class="listingblock">
+<div class="title">core</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public record Operation&lt;TYPE, RESULT&gt;(String name) {}
+
+public interface Operations {
+
+   public static Operation&lt;Nameable, String&gt; NAMEABLE_NAME = new Operation&lt;&gt;("nameable.name");
+}
+
+public interface ProviderSpi {
+
+   &lt;RESULT, TYPE extends ImplementationDefined&gt; Response&lt;RESULT&gt; request(TYPE instance, Operation&lt;TYPE, RESULT&gt; operation);
+}
+
+public sealed interface Response&lt;T&gt; {
+
+   /**
+    * Equivalent to Optional.empty to prevent to much nesting
+    */
+   public final class Empty&lt;T&gt; implements Response&lt;T&gt; {}
+
+   public final class Unsupported&lt;T&gt; implements Response&lt;T&gt; {}
+
+   public record Result&lt;T&gt;(T value) implements Response&lt;T&gt; {}
+}</code></pre>
 </div>
-<div class="ulist">
-<div class="title">Open Questions when writing a Query based Api:</div>
-<ul>
-<li>
-<p>What is a good way to keep implementations in sync?</p>
-</li>
-<li>
-<p>How to keep the barrier of entry low?</p>
-</li>
-<li>
-<p>Would a combining it with Solution 1 help?</p>
-</li>
-</ul>
+</div>
+<div class="listingblock">
+<div class="title">usage</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">static {
+
+   Method method = null;
+   String name = requestOrThrow(method, NAMEABLE_NAME);
+}</code></pre>
+</div>
 </div>
 </div>
 </div>

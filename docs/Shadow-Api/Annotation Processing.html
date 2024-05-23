@@ -69,10 +69,7 @@
     <span class="nav-text">Articles</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="article/Meta%20Model.html">Meta Model Design</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="article/Implementations%20define%20featureset.html">How can Implementations define the featureset?</a>
+    <a class="nav-link" href="article/Meta%20Model.html">Meta Model</a>
   </li>
 </ul>
   </li>
@@ -106,8 +103,8 @@
 <h2 id="_what_is_this"><a class="anchor" href="#_what_is_this"></a>What is this?</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Annotation-processors run at compile time. They process representations of the %linenums code that is being compiled.
-They also can create new Files, including %linenums files, and raise errors or warnings.</p>
+<p>Annotation-processors run at compile time. They process representations of the source code that is being compiled.
+They also can create new Files, including source files, and raise errors or warnings.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -244,7 +241,7 @@ One having the code to process and one containing the annotation processor.</p>
                 &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
                 &lt;version&gt;3.8.1&lt;/version&gt;
                 &lt;configuration&gt;
-                    &lt;%linenums&gt;17&lt;/%linenums&gt;
+                    &lt;source&gt;17&lt;/source&gt;
                     &lt;target&gt;17&lt;/target&gt;
                     &lt;!--don't compile the annotation processor using the annotation processor--&gt;
                     &lt;compilerArgument&gt;-proc:none&lt;/compilerArgument&gt;
@@ -275,7 +272,7 @@ public class MyProcessor extends ShadowProcessor
 <div class="sect2">
 <h3 id="_6_register_this_processor"><a class="anchor" href="#_6_register_this_processor"></a>6) Register this processor</h3>
 <div class="listingblock">
-<div class="title">Create a file in <code>src/main/re%linenumss/META-INF/services/</code> called <code>javax.annotation.processing.Processor</code> and add your qualified path</div>
+<div class="title">Create a file in <code>src/main/resources/META-INF/services/</code> called <code>javax.annotation.processing.Processor</code> and add your qualified path</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">io.determann.shadow.example.processor.MyProcessor</code></pre>
 </div>
@@ -334,6 +331,7 @@ import io.determann.shadow.api.shadow.Class;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.determann.shadow.api.lang_model.query.LangModelQueries.query;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
@@ -346,11 +344,11 @@ public class ShadowBuilderProcessor extends ShadowProcessor
    public void process(final AnnotationProcessingContext annotationProcessingContext)
    {
       //iterate over every class annotated with the BuilderPattern annotation
-      for (Class aClass : annotationProcessingContext.getAnnotatedWith("io.determann.shadow.builder.BuilderPattern").classes())
+      for (Class aClass : annotationProcessingContext.getClassesAnnotatedWith("io.determann.shadow.builder.BuilderPattern"))
       {
          String toBuildQualifiedName = aClass.getQualifiedName();
          String builderQualifiedName = toBuildQualifiedName + "ShadowBuilder";//qualifiedName of the companion builder class
-         String builderSimpleName = aClass.getName() + "ShadowBuilder";//simpleName of the companion builder class
+         String builderSimpleName = query(aClass).getName() + "ShadowBuilder";//simpleName of the companion builder class
          String builderVariableName = uncapitalize(builderSimpleName);
 
          //create a record holding the code needed to render a property in the builder
@@ -435,7 +433,7 @@ public class ShadowBuilderProcessor extends ShadowProcessor
                           type,
                           propertyName);
 
-      String toBuildSetter = builderVariableName + "." + property.getSetter().getName() + "(" + propertyName + ");";
+      String toBuildSetter = builderVariableName + "." + query(property.getSetter()).getName() + "(" + propertyName + ");";
 
       return new BuilderElement(field, mutator, toBuildSetter);
    }
