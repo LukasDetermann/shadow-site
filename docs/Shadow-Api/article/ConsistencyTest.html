@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Testing the Consistency of Reflection and Annotation processing :: Shadow Api</title>
+    <meta name="generator" content="Antora 3.1.9">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <a href="#">Shadow Api</a>
+            </div>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <a class="navbar-item" href="../index.html">Home</a>
+                <a class="navbar-item" href="../Annotation%20Processing.html">Implementations</a>
+                <a class="navbar-item" href="Meta%20Model.html">Articles</a>
+                <a class="navbar-item" href="https://github.com/LukasDetermann/shadow">
+                    <span class="icon">
+                        <svg aria-hidden="true" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 98 96">
+                            <path fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
+                                  fill="#fff"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header><div class="body">
+<div class="nav-container" data-component="Shadow-Api" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../index.html">Shadow-Api</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Implementations</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../Annotation%20Processing.html">Annotation Processing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../Reflection.html">reflection</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../java.lang.model.html">java.lang.model</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Articles</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="ConsistencyTest.html">Consistency Testing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Meta%20Model.html">Meta Model</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Shadow-Api</a></li>
+    <li>Articles</li>
+    <li><a href="ConsistencyTest.html">Consistency Testing</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Testing the Consistency of Reflection and Annotation processing</h1>
+<div class="sect1">
+<h2 id="_intro"><a class="anchor" href="#_intro"></a>Intro</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Java SE and the Java ecosystem offer a multitude of meta programming APIs.
+They serve the same purpose just in different contexts.
+Annotation processing to analyse classes in the during compilation process, or Reflection to do the same at runtime.
+They have context dependent differences.
+Type erasure for example.
+Some Type information is lost at the end of the compilation and no longer present at runtime.
+<code>Map&lt;Long, List&lt;String&gt;&gt;</code> at compiletime becomes just <code>Map</code> at runtime.
+With these differences acounted for, there is still a lot of API surface left that should be consistent.
+But is it?</p>
+</div>
+<div class="paragraph">
+<p>This project is an Abstraction for meta-programming.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/Overview.svg" alt="Overview" width="80%">
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_api"><a class="anchor" href="#_the_api"></a>The Api</h3>
+<div class="paragraph">
+<p>The Api is request based.
+As a caller you can request for example a field of a class.
+Accessing fields may or may not be supported.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+void request()
+{
+   //adapter for the reflection api
+   Class systemClass = ReflectionAdapter.generalize(System.class);
+   //request the field "out" for the class java.lang.System
+   Response&lt;Field&gt; out = Provider.request(systemClass,
+                                          Operations.DECLARED_GET_FIELD,
+                                          "out");
+
+   switch (out)
+   {
+      //the implementation may not support this operation
+      //e.g. it's impossible to access fields with reflection
+      case Response.Unsupported&lt;Field&gt; unsupported -&gt; Assertions.fail();
+      //the implementation may support this operation, but there is no
+      //result for this instance
+      //e.g. the class java.lang.System does not have a field called "out"
+      case Response.Empty&lt;Field&gt; empty -&gt; Assertions.fail();
+      //accessing fields via reflection is possible and java.lang.System
+      //does have a field called "out" therefore a result is expected
+      case Response.Result&lt;Field&gt; result -&gt;
+      {
+         assertTrue(result.value().isPublic());
+         assertTrue(result.value().isStatic());
+         assertTrue(result.value().isFinal());
+      }
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or use a convenience method if <code>Optional.empty()</code> or throwing an Exception is a fitting default behavior.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+void requestOrEmpty()
+{
+   //adapter for the reflection api
+   Class systemClass = ReflectionAdapter.generalize(System.class);
+   //request the field "out" for the class java.lang.System.
+   //If its unsupported an Empty Optional is returned
+   Optional&lt;Field&gt; out = Provider.requestOrEmpty(systemClass,
+                                                 Operations.DECLARED_GET_FIELD,
+                                                 "out");
+
+   assertTrue(out.isPresent());
+   assertTrue(out.get().isPublic());
+   assertTrue(out.get().isStatic());
+   assertTrue(out.get().isFinal());
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+void requestOrThrow()
+{
+   //adapter for the reflection api
+   Class systemClass = ReflectionAdapter.generalize(System.class);
+   //request the field "out" for the class java.lang.System.
+   //If its unsupported an Exception is thrown
+   Field out = Provider.requestOrThrow(systemClass,
+                                       Operations.DECLARED_GET_FIELD,
+                                       "out");
+
+   assertTrue(out.isPublic());
+   assertTrue(out.isStatic());
+   assertTrue(out.isFinal());
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_consistency_tests"><a class="anchor" href="#_consistency_tests"></a>Consistency Tests</h3>
+<div class="paragraph">
+<p>Testing consistency works like this.
+We start with a String representation of some code.
+This code gets compiled using the <code>javax.tools.JavaCompiler</code> and the Annotation processing part is executed and tested with the consumer supplied to the method "test".
+The compiled code is intercepted and loaded with a custom Classloader into the runtime.
+There the reflection part is executed and tested with the same consumer.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+void classDeclarationRendering()
+{
+   String code =
+         "public class DependentGenerics&lt;A extends Comparable&lt;B&gt;, B extends Comparable&lt;A&gt;&gt; {}";
+
+   String expectedCode =
+         "public class DependentGenerics&lt;A extends Comparable&lt;B&gt;, B extends Comparable&lt;A&gt;&gt; {}\n";
+
+   compileTime(c -&gt; c.getClassOrThrow("DependentGenerics"))
+         .runtime(cl -&gt; ReflectionAdapter.generalize(cl.apply("DependentGenerics")))
+         .withCode("DependentGenerics.java", code)
+         .test(aClass -&gt; assertEquals(expectedCode, render(DEFAULT, aClass).declaration()));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This tests:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Feature</p>
+<div class="ulist">
+<ul>
+<li>
+<p>class rendering</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Api</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>request(NAMEABLE_GET_NAME, class)</code> and others used internally by the render</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Adapters</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ReflectionAdapter#generalize</code></p>
+</li>
+<li>
+<p><code>LangModelAdapter#generalize</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Java</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>java.lang.Class#getSimpleName</code></p>
+</li>
+<li>
+<p><code>javax.lang.model.element.TypeElement#getSimpleName</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_findings"><a class="anchor" href="#_findings"></a>Findings</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_1_provides_directive_duplicates"><a class="anchor" href="#_1_provides_directive_duplicates"></a>1. Provides directive duplicates</h3>
+<div class="paragraph">
+<p>With the java platform module system you can enforce encapsulation.
+One way is to declare the implementations of service provider interfaces (Spi) using "provides [Spi-Name] with [Implementation-Name]".</p>
+</div>
+<div class="paragraph">
+<p>For the module java.desktop this looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">module java.desktop {
+
+   //...
+
+    provides javax.sound.midi.spi.MidiDeviceProvider with
+        com.sun.media.sound.MidiInDeviceProvider,
+        com.sun.media.sound.MidiOutDeviceProvider,
+        com.sun.media.sound.RealTimeSequencerProvider,
+        com.sun.media.sound.SoftProvider;
+    provides javax.sound.midi.spi.MidiFileReader with
+        com.sun.media.sound.StandardMidiFileReader;
+    provides javax.sound.midi.spi.MidiFileWriter with
+        com.sun.media.sound.StandardMidiFileWriter;
+    provides javax.sound.midi.spi.SoundbankReader with
+        com.sun.media.sound.AudioFileSoundbankReader,
+        com.sun.media.sound.DLSSoundbankReader,
+        com.sun.media.sound.JARSoundbankReader,
+        com.sun.media.sound.SF2SoundbankReader;
+
+      //...
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_reflection"><a class="anchor" href="#_reflection"></a>Reflection</h4>
+<div class="paragraph">
+<p>Using Reflection we can list the provides directives like this.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ModuleFinder.ofSystem()
+            .find("java.desktop")
+            .orElseThrow()
+            .descriptor()
+            .provides()
+            .toList();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>resulting in</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ModuleDescriptor.Provides
+    service javax.sound.midi.spi.MidiDeviceProvider
+    providers
+        com.sun.media.sound.MidiInDeviceProvider
+        com.sun.media.sound.MidiOutDeviceProvider
+        com.sun.media.sound.RealTimeSequencerProvider
+        com.sun.media.sound.SoftProvider
+ModuleDescriptor.Provides
+    service javax.sound.midi.spi.MidiFileReader
+    providers
+        com.sun.media.sound.StandardMidiFileReader
+ModuleDescriptor.Provides
+    service javax.sound.midi.spi.MidiFileWriter
+    providers
+        com.sun.media.sound.StandardMidiFileWriter
+ModuleDescriptor.Provides
+    service javax.sound.midi.spi.SoundbankReader
+    providers
+        com.sun.media.sound.AudioFileSoundbankReader
+        com.sun.media.sound.DLSSoundbankReader
+        com.sun.media.sound.JARSoundbankReader
+        com.sun.media.sound.SF2SoundbankReader</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_annotation_processing"><a class="anchor" href="#_annotation_processing"></a>Annotation Processing</h4>
+<div class="paragraph">
+<p>Accessing the same information with Annotation Processing is a bit more work.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SupportedSourceVersion(SourceVersion.RELEASE_21)
+@SupportedAnnotationTypes("*")
+public class Processor extends AbstractProcessor
+{
+   @Override
+   public boolean process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment roundEnv)
+   {
+      ModuleElement javaDesktop = processingEnv.getElementUtils().getModuleElement("java.desktop");
+      javaDesktop.getDirectives()
+                 .stream()
+                 .filter(directive -&gt; directive.getKind().equals(ModuleElement.DirectiveKind.PROVIDES))
+                 .map(ModuleElement.ProvidesDirective.class::cast)
+                 .toList();
+
+      return false;
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And the results contain duplicates.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ModuleElement.ProvidesDirective
+    service javax.sound.midi.spi.MidiDeviceProvider
+    impls
+        com.sun.media.sound.MidiInDeviceProvider
+        com.sun.media.sound.MidiOutDeviceProvider
+ModuleElement.ProvidesDirective
+    service javax.sound.midi.spi.MidiDeviceProvider
+    impls
+        com.sun.media.sound.MidiInDeviceProvider
+        com.sun.media.sound.MidiOutDeviceProvider
+        com.sun.media.sound.RealTimeSequencerProvider
+ModuleElement.ProvidesDirective
+    service javax.sound.midi.spi.MidiDeviceProvider
+    impls
+        com.sun.media.sound.MidiInDeviceProvider
+        com.sun.media.sound.MidiOutDeviceProvider
+        com.sun.media.sound.RealTimeSequencerProvider
+        com.sun.media.sound.SoftProvider
+ModuleElement.ProvidesDirective
+    service javax.sound.midi.spi.MidiFileReader
+    impls
+        com.sun.media.sound.StandardMidiFileReader
+ModuleElement.ProvidesDirective
+    service javax.sound.midi.spi.MidiFileWriter
+    impls
+        com.sun.media.sound.StandardMidiFileWriter
+ModuleElement.ProvidesDirective
+    service javax.sound.midi.spi.SoundbankReader
+    impls
+        com.sun.media.sound.AudioFileSoundbankReader
+        com.sun.media.sound.DLSSoundbankReader
+        com.sun.media.sound.JARSoundbankReader
+        com.sun.media.sound.SF2SoundbankReader
+ModuleElement.ProvidesDirective
+    service javax.sound.midi.spi.SoundbankReader
+    impls
+        com.sun.media.sound.AudioFileSoundbankReader
+        com.sun.media.sound.DLSSoundbankReader
+        com.sun.media.sound.JARSoundbankReader
+ModuleElement.ProvidesDirective
+    service javax.sound.midi.spi.SoundbankReader
+    impls
+        com.sun.media.sound.AudioFileSoundbankReader
+        com.sun.media.sound.DLSSoundbankReader
+ModuleElement.ProvidesDirective
+    service javax.sound.midi.spi.SoundbankReader
+    impls
+        com.sun.media.sound.AudioFileSoundbankReader</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_receiver_parameter"><a class="anchor" href="#_2_receiver_parameter"></a>2. Receiver Parameter</h3>
+<div class="paragraph">
+<p>Receiver parameter got introduced with java 8 and
+<a href="https://jcp.org/en/jsr/detail?id=308">JSR 308</a> but are very rarely used.
+To the point that I have never seen them in the wild.</p>
+</div>
+<div class="quoteblock">
+<div class="title">The Java language Specification describes them as followed</div>
+<blockquote>
+<div class="paragraph">
+<p>The receiver parameter is an optional syntactic device for an instance method or an inner class&#8217;s constructor. For an instance method, the receiver parameter represents the object for which the method is invoked. For an inner class&#8217;s constructor, the receiver parameter represents the immediately enclosing instance of the newly constructed object. In both cases, the receiver parameter exists solely to allow the type of the represented object to be denoted in source code, so that the type may be annotated (§9.7.4). The receiver parameter is not a formal parameter; more precisely, it is not a declaration of any kind of variable (§4.12.3), it is never bound to any value passed as an argument in a method invocation expression or class instance creation expression, and it has no effect whatsoever at run time.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-FormalParameter
+</div>
+</div>
+<div class="paragraph">
+<p>The points we will focus on are, that they can be used in two places, and are a special kind of parameter.</p>
+</div>
+<div class="paragraph">
+<p>The Handling is inconsistent in Reflection.</p>
+</div>
+<div class="sect3">
+<h4 id="_method"><a class="anchor" href="#_method"></a>Method</h4>
+<div class="paragraph">
+<p>If we get the parameter for a method like this with <code>Executable#getParameters()</code> the result does not contain the Receiver.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MethodExample {
+   public void foo(@MyAnnotation MethodExample MethodExample.this) {}
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+void methodReceiver()
+{
+   Executable method = Arrays.stream(MethodExample.class.getMethods())
+                             .filter(method1 -&gt; method1.getName().equals("foo"))
+                             .findFirst()
+                             .get();
+
+   Parameter[] methodParameters = method.getParameters();
+   Assertions.assertEquals(0, methodParameters.length);
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_constructor"><a class="anchor" href="#_constructor"></a>Constructor</h4>
+<div class="paragraph">
+<p>If we get the parameter for a constructor with <code>Executable#getParameters()</code> the result does contain the Receiver.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class ConstructorExample {
+   public class Inner {
+      public Inner(@MyAnnotation ConstructorExample ConstructorExample.this) {}
+   }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+void constructorReceiver()
+{
+   Executable constructor = ConstructorExample.Inner.class.getConstructors()[0];
+
+   Parameter[] constructorParameters = constructor.getParameters();
+   Assertions.assertEquals(1, constructorParameters.length);
+   Assertions.assertEquals(ConstructorExample.class, constructorParameters[0].getType());
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conclusion"><a class="anchor" href="#_conclusion"></a>Conclusion</h3>
+<div class="paragraph">
+<p>Meta programming Apis scale with the complexity of the language.
+Java has many features.
+The Reflection and Annotation-Processing Apis cover a lot of them.
+The only inconsistencies I found are in rarely used Apis for rarely used language features.
+Both are reported.
+I&#8217;d like to support the <a href="https://openjdk.org/jeps/466">Class-File API</a> in the short to midterm and test its consistency too.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+    <p>The Ui for this site is based in part on the <a href="https://gitlab.com/antora/antora-ui-default">Antora Default UI</a></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
