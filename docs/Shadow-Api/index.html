@@ -467,10 +467,10 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import static java.util.stream.Collectors.toUnmodifiableSet;
+import java.util.stream.Collectors;
 
 public interface LangModelAdapter
 {
@@ -609,7 +609,15 @@ public interface LangModelAdapter
 
    static Set&lt;Modifier&gt; getModifiers(Element element)
    {
-      return element.getModifiers().stream().map(LangModelAdapter::mapModifier).collect(toUnmodifiableSet());
+      Set&lt;Modifier&gt; result = element.getModifiers().stream().map(LangModelAdapter::mapModifier).collect(Collectors.toSet());
+      if ((element.getKind().isExecutable() || element.getKind().isDeclaredType() || element.getKind().isVariable()) &amp;&amp;
+          !result.contains(Modifier.PUBLIC) &amp;&amp;
+          !result.contains(Modifier.PROTECTED) &amp;&amp;
+          !result.contains(Modifier.PRIVATE))
+      {
+         result.add(Modifier.PACKAGE_PRIVATE);
+      }
+      return Collections.unmodifiableSet(result);
    }
 
    static Modifier mapModifier(javax.lang.model.element.Modifier modifier)
@@ -753,14 +761,14 @@ public interface LangModelAdapter
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.api.reflection;
 
 import io.determann.shadow.api.shadow.annotationusage.AnnotationUsage;
-import io.determann.shadow.api.shadow.module.*;
+import io.determann.shadow.api.shadow.directive.*;
 import io.determann.shadow.api.shadow.structure.Module;
 import io.determann.shadow.api.shadow.structure.Package;
 import io.determann.shadow.api.shadow.structure.*;
 import io.determann.shadow.api.shadow.type.*;
 import io.determann.shadow.internal.reflection.NamedSupplier;
 import io.determann.shadow.internal.reflection.shadow.*;
-import io.determann.shadow.internal.reflection.shadow.module.*;
+import io.determann.shadow.internal.reflection.shadow.directive.*;
 
 import java.lang.Class;
 import java.lang.Enum;

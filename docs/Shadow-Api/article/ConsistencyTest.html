@@ -154,12 +154,7 @@ void request()
       case Response.Empty&lt;Field&gt; empty -&gt; Assertions.fail();
       //accessing fields via reflection is possible and java.lang.System
       //does have a field called "out" therefore a result is expected
-      case Response.Result&lt;Field&gt; result -&gt;
-      {
-         assertTrue(result.value().isPublic());
-         assertTrue(result.value().isStatic());
-         assertTrue(result.value().isFinal());
-      }
+      case Response.Result&lt;Field&gt; result -&gt; assertNotNull(result.value());
    }
 }</code></pre>
 </div>
@@ -181,9 +176,6 @@ void requestOrEmpty()
                                                  "out");
 
    assertTrue(out.isPresent());
-   assertTrue(out.get().isPublic());
-   assertTrue(out.get().isStatic());
-   assertTrue(out.get().isFinal());
 }</code></pre>
 </div>
 </div>
@@ -200,9 +192,7 @@ void requestOrThrow()
                                        Operations.DECLARED_GET_FIELD,
                                        "out");
 
-   assertTrue(out.isPublic());
-   assertTrue(out.isStatic());
-   assertTrue(out.isFinal());
+   assertNotNull(out);
 }</code></pre>
 </div>
 </div>
