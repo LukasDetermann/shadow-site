@@ -136,7 +136,7 @@ They also can create new Files, including source files, and raise errors or warn
 <div class="paragraph">
 <p>It&#8217;s normal annotation processing with a better API.
 The setup is the same.
-The differences only start when extending`io.determann.shadow.api.annotation_processing.ShadowProcessor` instead of <code>javax.annotation.processing.AbstractProcessor</code>.
+The differences only start when extending`io.determann.shadow.api.annotation_processing.AP_Processor` instead of <code>javax.annotation.processing.AbstractProcessor</code>.
 A good starting point for your own processor is <code>AnnotationProcessingContext.getAnnotatedWith(java.lang.String)</code>.</p>
 </div>
 </div>
@@ -260,8 +260,8 @@ One having the code to process and one containing the annotation processor.</p>
 <div class="listingblock">
 <div class="title">Extend <code>ShadowProcessor</code> for your own processor and override <code>process()</code></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.determann.shadow.api.annotation_processing.AnnotationProcessingContext;
-import io.determann.shadow.api.annotation_processing.ShadowProcessor;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.determann.shadow.api.annotation_processing.AP_Context;
+import io.determann.shadow.api.annotation_processing.AP_Processor;
 
 public class MyProcessor extends ShadowProcessor
 {
@@ -295,8 +295,8 @@ public class MyProcessor extends ShadowProcessor
 <div class="listingblock">
 <div class="title">And finally process anything annotated with that annotation</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.determann.shadow.api.annotation_processing.AnnotationProcessingContext;
-import io.determann.shadow.api.annotation_processing.ShadowProcessor;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.determann.shadow.api.annotation_processing.AP_Context;
+import io.determann.shadow.api.annotation_processing.AP_Processor;
 
 public class MyProcessor extends ShadowProcessor
 {
@@ -326,58 +326,63 @@ public @interface BuilderPattern {}</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.builder;
 
-import io.determann.shadow.api.annotation_processing.AnnotationProcessingContext;
-import io.determann.shadow.api.annotation_processing.ShadowProcessor;
-import io.determann.shadow.api.shadow.Nameable;
-import io.determann.shadow.api.shadow.QualifiedNameable;
-import io.determann.shadow.api.shadow.property.MutableProperty;
-import io.determann.shadow.api.shadow.type.Class;
+import io.determann.shadow.api.annotation_processing.AP_Context;
+import io.determann.shadow.api.annotation_processing.AP_Processor;
+import io.determann.shadow.api.lang_model.shadow.LM_Nameable;
+import io.determann.shadow.api.lang_model.shadow.LM_QualifiedNameable;
+import io.determann.shadow.api.lang_model.shadow.structure.LM_Property;
+import io.determann.shadow.api.lang_model.shadow.type.LM_Class;
+import io.determann.shadow.api.lang_model.shadow.type.LM_Shadow;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.determann.shadow.api.lang_model.LangModelQueries.query;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 /**
  * Builds a companion Builder class for each annotated class
  */
-public class ShadowBuilderProcessor extends ShadowProcessor
+public class ShadowBuilderProcessor extends AP_Processor
 {
    @Override
-   public void process(final AnnotationProcessingContext annotationProcessingContext)
+   public void process(final AP_Context context)
    {
       //iterate over every class annotated with the BuilderPattern annotation
-      for (Class aClass : annotationProcessingContext.getClassesAnnotatedWith("io.determann.shadow.builder.BuilderPattern"))
+      for (LM_Class aClass : context
+            .getClassesAnnotatedWith("io.determann.shadow.builder.BuilderPattern"))
       {
-         String toBuildQualifiedName = query((QualifiedNameable) aClass).getQualifiedName();
-         String builderQualifiedName = toBuildQualifiedName + "ShadowBuilder";//qualifiedName of the companion builder class
-         String builderSimpleName = query((Nameable) aClass).getName() + "ShadowBuilder";//simpleName of the companion builder class
+         String toBuildQualifiedName = aClass.getQualifiedName();
+         //qualifiedName of the companion builder class
+         String builderQualifiedName = toBuildQualifiedName + "ShadowBuilder";
+         //simpleName of the companion builder class
+         String builderSimpleName = aClass.getName() + "ShadowBuilder";
          String builderVariableName = uncapitalize(builderSimpleName);
 
          //create a record holding the code needed to render a property in the builder
-         List&lt;BuilderElement&gt; builderElements = query(aClass).getMutableProperties()
-                                                             .stream()
-                                                             .map(property -&gt; renderProperty(builderSimpleName,
-                                                                                             builderVariableName,
-                                                                                             property))
-                                                             .toList();
+         List&lt;BuilderElement&gt; builderElements =
+               aClass.getProperties()
+                     .stream()
+                     .filter(LM_Property::isMutable)
+                     .map(property -&gt; renderProperty(builderSimpleName,
+                                                     builderVariableName,
+                                                     property))
+                     .toList();
 
          //writes the builder
-         annotationProcessingContext.writeAndCompileSourceFile(builderQualifiedName,
-                                                               renderBuilder(aClass,
-                                                                             toBuildQualifiedName,
-                                                                             builderSimpleName,
-                                                                             builderVariableName,
-                                                                             builderElements));
+         context.writeAndCompileSourceFile(builderQualifiedName,
+                                           renderBuilder(aClass,
+                                                         toBuildQualifiedName,
+                                                         builderSimpleName,
+                                                         builderVariableName,
+                                                         builderElements));
       }
    }
 
    /**
     * renders a companion builder class
     */
-   private String renderBuilder(final Class aClass,
+   private String renderBuilder(final LM_Class aClass,
                                 final String toBuildQualifiedName,
                                 final String builderSimpleName,
                                 final String builderVariableName,
@@ -408,7 +413,7 @@ public class ShadowBuilderProcessor extends ShadowProcessor
                   return %6$s;
                }
             }
-            """.formatted(query((QualifiedNameable) query(aClass).getPackage()).getQualifiedName(),
+            """.formatted(aClass.getPackage().getQualifiedName(),
                           builderSimpleName,
                           fields,
                           mutators,
@@ -422,10 +427,10 @@ public class ShadowBuilderProcessor extends ShadowProcessor
     */
    private BuilderElement renderProperty(final String builderSimpleName,
                                          final String builderVariableName,
-                                         final MutableProperty property)
+                                         final LM_Property property)
    {
       String propertyName = property.getName();
-      String type = property.getType().toString();
+      String type = renderType(property.getType());
       String field = "private " + type + " " + propertyName + ";";
 
       String mutator = """
@@ -438,7 +443,9 @@ public class ShadowBuilderProcessor extends ShadowProcessor
                           type,
                           propertyName);
 
-      String toBuildSetter = builderVariableName + "." + query((Nameable) property.getSetter()).getName() + "(" + propertyName + ");";
+      String toBuildSetter = builderVariableName + "." +
+                             property.getSetterOrThrow().getName() +
+                             "(" + propertyName + ");";
 
       return new BuilderElement(field, mutator, toBuildSetter);
    }
@@ -453,6 +460,19 @@ public class ShadowBuilderProcessor extends ShadowProcessor
    private record BuilderElement(String field,
                                  String mutator,
                                  String toBuildSetter) {}
+
+   private static String renderType(LM_Shadow shadow)
+   {
+      if (shadow instanceof LM_QualifiedNameable qualifiedNameable)
+      {
+         return qualifiedNameable.getQualifiedName();
+      }
+      if (shadow instanceof LM_Nameable nameable)
+      {
+         return nameable.getName();
+      }
+      return shadow.toString();
+   }
 }</code></pre>
 </div>
 </div>

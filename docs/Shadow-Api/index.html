@@ -101,971 +101,276 @@
 </aside>
 <article class="doc">
 <h1 class="page">Shadow Api</h1>
-<div class="sect1">
-<h2 id="_why_shadow_api"><a class="anchor" href="#_why_shadow_api"></a>Why Shadow Api?</h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are a lot of different Meta-Programming Apis.
+<p>Java SE and the Java ecosystem offer a multitude of Metaprogramming Apis.
+They serve the same purpose just in different contexts.
+Annotation processing to analyse classes in the during compilation process, or Reflection to do the same at runtime.
 Each having unique concepts and quirks.
-This makes Meta-Programming harder to understand and creates a maintenance overhead.
+This makes Metaprogramming harder to understand and creates a maintenance overhead.
+It&#8217;s very hard to switch from one Api to another.
 Once something is written with java.lang.reflect it&#8217;s hard to change it to an Annotation Processor.
-Some Apis like
-<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.compiler/javax/lang/model/package-summary.html">javax.lang.model</a>,
-are not up to the normal JDK standard.</p>
+Some JDK Apis are not up to the normal standard.</p>
 </div>
 <div class="paragraph">
-<p>Shadow Api offers:</p>
+<p>This project is an Abstraction for Metaprogramming</p>
 </div>
-<details>
-<summary class="title">Straightforward data structure</summary>
+<div class="imageblock">
 <div class="content">
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Shadow Api</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JDK</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>Shadow</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Declared</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Class</p>
-</li>
-<li>
-<p>Enum</p>
-</li>
-<li>
-<p>Record</p>
-</li>
-<li>
-<p>Annotation</p>
-<div class="ulist">
-<ul>
-<li>
-<p>AnnotationUsage</p>
-</li>
-</ul>
+<img src="_images/Overview.svg" alt="Overview" width="80%">
 </div>
-</li>
-</ul>
 </div>
-</li>
-<li>
-<p>Array</p>
-</li>
-<li>
-<p>Executable</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Constructor</p>
-</li>
-<li>
-<p>Method</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>It has two Types of Apis</p>
 </div>
-</li>
-<li>
-<p>Intersection</p>
-</li>
-<li>
-<p>Void</p>
-</li>
-<li>
-<p>Module</p>
-</li>
-<li>
-<p>Package</p>
-</li>
-<li>
-<p>RecordComponent</p>
-</li>
-<li>
-<p>Null</p>
-</li>
-<li>
-<p>Primitive</p>
-</li>
-<li>
-<p>Generic</p>
-</li>
-<li>
-<p>Wildcard</p>
-</li>
-<li>
-<p>Variable</p>
-<div class="ulist">
-<ul>
-<li>
-<p>EnumConstant</p>
-</li>
-<li>
-<p>Field</p>
-</li>
-<li>
-<p>Parameter</p>
-</li>
-</ul>
 </div>
-</li>
-</ul>
 </div>
-</li>
-</ul>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Cell with a list</p>
+<div class="sect1">
+<h2 id="_general_purpose_api"><a class="anchor" href="#_general_purpose_api"></a>General Purpose Api</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This Api works with any kind of Metaprogramming, but the featureset is limited to common operations</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>TypeMirror</p>
-<div class="ulist">
-<ul>
-<li>
-<p>ReferenceType</p>
-<div class="ulist">
-<ul>
-<li>
-<p>ArrayType</p>
-</li>
-<li>
-<p>DeclaredType</p>
-</li>
-<li>
-<p>ErrorType</p>
-</li>
-<li>
-<p>NullType</p>
-</li>
-<li>
-<p>TypeVariable</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>ExecutableType</p>
-</li>
-<li>
-<p>IntersectionType</p>
-</li>
-<li>
-<p>NoType</p>
-</li>
-<li>
-<p>PrimitiveType</p>
-</li>
-<li>
-<p>UnionType</p>
-</li>
-<li>
-<p>WildcardType</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>AnnotationMirror</p>
-</li>
-<li>
-<p>Element</p>
-<div class="ulist">
-<ul>
-<li>
-<p>ExecutableElement</p>
-</li>
-<li>
-<p>ModuleElement</p>
-</li>
-<li>
-<p>PackageElement</p>
-</li>
-<li>
-<p>RecordComponentElement</p>
-</li>
-<li>
-<p>TypeElement</p>
-</li>
-<li>
-<p>TypeParameterElement</p>
-</li>
-<li>
-<p>VariableElement</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-</details>
 <details>
-<summary class="title">Safe conversion between objects</summary>
+<summary class="title">Example</summary>
 <div class="content">
 <div class="paragraph">
-<p>Let&#8217;s say you process the following class and want to get the type of the List</p>
+<p>The Api is request based.
+As a caller you can request for example a field of a class.
+Accessing fields may or may not be supported.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class MyClass
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+void request()
 {
-   private final List&lt;String&gt; myField;
+   //adapter for the reflection api
+   C_Class systemClass = R_Adapter.generalize(System.class);
+   //request the field "out" for the class java.lang.System
+   Response&lt;C_Field&gt; out = Provider.request(systemClass,
+                                            Operations.DECLARED_GET_FIELD,
+                                            "out");
+
+   switch (out)
+   {
+      //the implementation may not support this operation
+      //e.g. it's impossible to access fields with reflection
+      case Response.Unsupported&lt;C_Field&gt; unsupported -&gt; Assertions.fail();
+      //the implementation may support this operation, but there is no
+      //result for this instance
+      //e.g. the class java.lang.System does not have a field called "out"
+      case Response.Empty&lt;C_Field&gt; empty -&gt; Assertions.fail();
+      //accessing fields via reflection is possible and java.lang.System
+      //does have a field called "out" therefore a result is expected
+      case Response.Result&lt;C_Field&gt; result -&gt; assertNotNull(result.value());
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or use a convenience method if <code>Optional.empty()</code> or throwing an Exception is a fitting default behavior.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+void requestOrEmpty()
+{
+   //adapter for the reflection api
+   C_Class systemClass = R_Adapter.generalize(System.class);
+   //request the field "out" for the class java.lang.System.
+   //If its unsupported an Empty Optional is returned
+   Optional&lt;C_Field&gt; out = Provider.requestOrEmpty(systemClass,
+                                                   Operations.DECLARED_GET_FIELD,
+                                                   "out");
+
+   assertTrue(out.isPresent());
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Shadow Api</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Shadow myField = query(query(context.getClassOrThrow("MyClass"))
-                        .getFieldOrThrow("myField"))
-                        .getType();
-//Converters limit the conversion to possible types
-Shadow genericShadow = query(convert(myField).toInterfaceOrThrow())
-                                     .getGenericTypes()
-                                     .get(0);
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+void requestOrThrow()
+{
+   //adapter for the reflection api
+   C_Class systemClass = R_Adapter.generalize(System.class);
+   //request the field "out" for the class java.lang.System.
+   //If its unsupported an Exception is thrown
+   C_Field out = Provider.requestOrThrow(systemClass,
+                                         Operations.DECLARED_GET_FIELD,
+                                         "out");
 
-assertEquals(context.getClassOrThrow("java.lang.String"), genericShadow);</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">JDK</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Elements elements = LangModelAdapter.getElements(context);
-//get a type -&gt; Element data structure
-List&lt;? extends Element&gt; myClass = elements.getTypeElement("MyClass")
-                                          .getEnclosedElements();
-
-//get fields of that type -&gt; Element data structure
-VariableElement myField = ElementFilter
-      .fieldsIn(myClass)
-      .stream()
-      .filter(field -&gt; field.getSimpleName()
-                            .toString()
-                            .equals("myField"))
-      .findAny()
-      .orElseThrow();
-
-//get Generic -&gt; switch to Type data structure
-TypeMirror genericType = ((DeclaredType) myField.asType()).getTypeArguments().get(0);
-
-//switch back to Element data structure for comparison
-Element genericElement = ((DeclaredType) genericType).asElement();
-
-assertEquals(elements.getTypeElement("java.lang.String"), genericElement);</code></pre>
-</div>
-</div>
-</div>
-</details>
-<details>
-<summary class="title">Better documentation, especially for hard to understand topics</summary>
-<div class="content">
-<div class="listingblock">
-<div class="title">Shadow Api. The javadoc uses @snippet</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface LangModelContext {
-   //..
-
-   /**
-   * Used when constructing types to compare to at compile time that contain multiple,
-   * on each other depended, generics.
-   * it answers the question: given
-   *
-   * public class MyClass&lt;A extends Comparable&lt;B&gt;, B extends Comparable&lt;A&gt;&gt; {}
-   *
-   * and A being String what can B be by returning the "simplest" possible answer.
-   * In this case String. The code for the example
-   *
-   * Class myClass = context.getClassOrThrow("MyClass");
-   * Declared string = context.getDeclaredOrThrow("java.lang.String");
-   * Class withGenerics = context.withGenerics(myClass,
-   *                                         string,
-   *                                         //the unboundWildcard will be replaced with the result
-   *                                         context.getConstants().getUnboundWildcard());
-   *
-   * Class capture = context.interpolateGenerics(withGenerics);
-   *
-   * Shadow stringRep = Optional.of(capture.getGenericTypes().get(1))
-   *                            .map(Converter::convert)
-   *                            .map(ShadowConverter::toGenericOrThrow)
-   *                            .map(Generic::getExtends)
-   *                            .map(Converter::convert)
-   *                            .map(ShadowConverter::toInterfaceOrThrow)
-   *                            .map(Interface::getGenericTypes)
-   *                            .map(shadows -&gt; shadows.get(0))
-   *                            .orElseThrow();
-   *
-   * Assertions.assertEquals(string, stringRep);
-   */
-   Class interpolateGenerics(Class aClass);
-
-   //..
-}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">jdk</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Types {
-   //...
-
-  /**
-   * {@return the erasure of a type}
-   *
-   * @param t  the type to be erased
-   * @throws IllegalArgumentException if given a type for a package or module
-   * @jls 4.6 Type Erasure
-   */
-  TypeMirror erasure(TypeMirror t);
-
-  //...
+   assertNotNull(out);
 }</code></pre>
 </div>
 </div>
 </div>
 </details>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_specific_apis"><a class="anchor" href="#_specific_apis"></a>Specific Apis</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There is one Api for each kind of Metaprogramming.
+One for Annotation processing and another very similar one for reflection.
+Each being able to support the complete featureset.</p>
+</div>
 <details>
-<summary class="title">Adapter for good JDK interoperability</summary>
-<div class="content">
-<details>
-<summary class="title">javax.lang.model</summary>
+<summary class="title">Example</summary>
 <div class="content">
 <div class="listingblock">
+<div class="title">This Annotation Processor generates Builder</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.api.lang_model;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.builder;
 
-import io.determann.shadow.api.shadow.Annotationable;
-import io.determann.shadow.api.shadow.annotationusage.AnnotationUsage;
-import io.determann.shadow.api.shadow.modifier.Modifier;
-import io.determann.shadow.api.shadow.structure.Module;
-import io.determann.shadow.api.shadow.structure.Package;
-import io.determann.shadow.api.shadow.structure.*;
-import io.determann.shadow.api.shadow.type.Void;
-import io.determann.shadow.api.shadow.type.*;
-import io.determann.shadow.internal.lang_model.LangModelContextImpl;
-import io.determann.shadow.internal.lang_model.annotationvalue.AnnotationUsageImpl;
-import io.determann.shadow.internal.lang_model.annotationvalue.AnnotationValueImpl;
-import io.determann.shadow.internal.lang_model.shadow.*;
+import io.determann.shadow.api.annotation_processing.AP_Context;
+import io.determann.shadow.api.annotation_processing.AP_Processor;
+import io.determann.shadow.api.lang_model.shadow.LM_Nameable;
+import io.determann.shadow.api.lang_model.shadow.LM_QualifiedNameable;
+import io.determann.shadow.api.lang_model.shadow.structure.LM_Property;
+import io.determann.shadow.api.lang_model.shadow.type.LM_Class;
+import io.determann.shadow.api.lang_model.shadow.type.LM_Shadow;
 
-import javax.lang.model.element.*;
-import javax.lang.model.type.*;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-public interface LangModelAdapter
+import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.uncapitalize;
+
+/**
+ * Builds a companion Builder class for each annotated class
+ */
+public class ShadowBuilderProcessor extends AP_Processor
 {
-   static AnnotationMirror particularize(AnnotationUsage annotationUsage)
+   @Override
+   public void process(final AP_Context context)
    {
-      return ((AnnotationUsageImpl) annotationUsage).getAnnotationMirror();
-   }
-
-   static DeclaredType particularType(Declared declared)
-   {
-      return ((DeclaredImpl) declared).getMirror();
-   }
-
-   static ArrayType particularType(Array array)
-   {
-      return ((ArrayImpl) array).getMirror();
-   }
-
-   static ExecutableType particularType(Executable executable)
-   {
-      return ((ExecutableImpl) executable).getMirror();
-   }
-
-   static TypeMirror particularType(Shadow shadow)
-   {
-      return ((ShadowImpl) shadow).getMirror();
-   }
-
-   static TypeVariable particularType(Generic generic)
-   {
-      return ((GenericImpl) generic).getMirror();
-   }
-
-   static IntersectionType particularType(Intersection intersection)
-   {
-      return ((IntersectionImpl) intersection).getMirror();
-   }
-
-   static NoType particularType(Module module)
-   {
-      return ((ModuleImpl) module).getMirror();
-   }
-
-   static NullType particularType(Null aNull)
-   {
-      return ((NullImpl) aNull).getMirror();
-   }
-
-   static NoType particularType(Package aPackage)
-   {
-      return ((PackageImpl) aPackage).getMirror();
-   }
-
-   static PrimitiveType particularType(Primitive primitive)
-   {
-      return ((PrimitiveImpl) primitive).getMirror();
-   }
-
-   static NoType particularType(Void aVoid)
-   {
-      return ((VoidImpl) aVoid).getMirror();
-   }
-
-   static WildcardType particularType(Wildcard wildcard)
-   {
-      return ((WildcardImpl) wildcard).getMirror();
-   }
-
-   static Element particularElement(Annotationable annotationable)
-   {
-      if (annotationable instanceof Declared declared)
+      //iterate over every class annotated with the BuilderPattern annotation
+      for (LM_Class aClass : context
+            .getClassesAnnotatedWith("io.determann.shadow.builder.BuilderPattern"))
       {
-         return particularElement(declared);
+         String toBuildQualifiedName = aClass.getQualifiedName();
+         //qualifiedName of the companion builder class
+         String builderQualifiedName = toBuildQualifiedName + "ShadowBuilder";
+         //simpleName of the companion builder class
+         String builderSimpleName = aClass.getName() + "ShadowBuilder";
+         String builderVariableName = uncapitalize(builderSimpleName);
+
+         //create a record holding the code needed to render a property in the builder
+         List&lt;BuilderElement&gt; builderElements =
+               aClass.getProperties()
+                     .stream()
+                     .filter(LM_Property::isMutable)
+                     .map(property -&gt; renderProperty(builderSimpleName,
+                                                     builderVariableName,
+                                                     property))
+                     .toList();
+
+         //writes the builder
+         context.writeAndCompileSourceFile(builderQualifiedName,
+                                           renderBuilder(aClass,
+                                                         toBuildQualifiedName,
+                                                         builderSimpleName,
+                                                         builderVariableName,
+                                                         builderElements));
       }
-      if (annotationable instanceof Executable executable)
-      {
-         return particularElement(executable);
-      }
-      if (annotationable instanceof Generic generic)
-      {
-         return particularElement(generic);
-      }
-      if (annotationable instanceof Module module)
-      {
-         return particularElement(module);
-      }
-      if (annotationable instanceof Package aPackage)
-      {
-         return particularElement(aPackage);
-      }
-      if (annotationable instanceof RecordComponent recordComponent)
-      {
-         return particularElement(recordComponent);
-      }
-      if (annotationable instanceof Variable variable)
-      {
-         return particularElement(variable);
-      }
-      throw new IllegalArgumentException();
-   }
-
-   static TypeElement particularElement(Declared declared)
-   {
-      return ((DeclaredImpl) declared).getElement();
-   }
-
-   static ExecutableElement particularElement(Executable executable)
-   {
-      return ((ExecutableImpl) executable).getElement();
-   }
-
-   static TypeParameterElement particularElement(Generic generic)
-   {
-      return ((GenericImpl) generic).getElement();
-   }
-
-   static ModuleElement particularElement(Module module)
-   {
-      return ((ModuleImpl) module).getElement();
-   }
-
-   static PackageElement particularElement(Package aPackage)
-   {
-      return ((PackageImpl) aPackage).getElement();
-   }
-
-   static RecordComponentElement particularElement(RecordComponent recordComponent)
-   {
-      return ((RecordComponentImpl) recordComponent).getElement();
-   }
-
-   static VariableElement particularElement(Variable variable)
-   {
-      return ((VariableImpl) variable).getElement();
-   }
-
-   static Set&lt;Modifier&gt; getModifiers(Element element)
-   {
-      Set&lt;Modifier&gt; result = element.getModifiers().stream().map(LangModelAdapter::mapModifier).collect(Collectors.toSet());
-      if ((element.getKind().isExecutable() || element.getKind().isDeclaredType() || element.getKind().isVariable()) &amp;&amp;
-          !result.contains(Modifier.PUBLIC) &amp;&amp;
-          !result.contains(Modifier.PROTECTED) &amp;&amp;
-          !result.contains(Modifier.PRIVATE))
-      {
-         result.add(Modifier.PACKAGE_PRIVATE);
-      }
-      return Collections.unmodifiableSet(result);
-   }
-
-   static Modifier mapModifier(javax.lang.model.element.Modifier modifier)
-   {
-      return switch (modifier)
-      {
-         case PUBLIC -&gt; Modifier.PUBLIC;
-         case PROTECTED -&gt; Modifier.PROTECTED;
-         case PRIVATE -&gt; Modifier.PRIVATE;
-         case ABSTRACT -&gt; Modifier.ABSTRACT;
-         case STATIC -&gt; Modifier.STATIC;
-         case SEALED -&gt; Modifier.SEALED;
-         case NON_SEALED -&gt; Modifier.NON_SEALED;
-         case FINAL -&gt; Modifier.FINAL;
-         case STRICTFP -&gt; Modifier.STRICTFP;
-         case DEFAULT -&gt; Modifier.DEFAULT;
-         case TRANSIENT -&gt; Modifier.TRANSIENT;
-         case VOLATILE -&gt; Modifier.VOLATILE;
-         case SYNCHRONIZED -&gt; Modifier.SYNCHRONIZED;
-         case NATIVE -&gt; Modifier.NATIVE;
-      };
-   }
-
-   public static LangModelContext generalize(Types types, Elements elements)
-   {
-      return new LangModelContextImpl(types, elements);
-   }
-
-   static Executable generalize(LangModelContext context, ExecutableElement element)
-   {
-      return new ExecutableImpl(context, element);
    }
 
    /**
-    * {@link Element}s represent a usage. so for example a field may have the type {@code List&lt;String&gt;}. When you want the resulting {@link Shadow}
-    * to represent {@code List&lt;String&gt;} and not just {@code List&lt;T&gt;} use the {@link Element} to create it.
-    *
-    * @see #generalize(LangModelContext, TypeMirror)
+    * renders a companion builder class
     */
-   static &lt;SHADOW extends Shadow&gt; SHADOW generalize(LangModelContext context, Element element)
+   private String renderBuilder(final LM_Class aClass,
+                                final String toBuildQualifiedName,
+                                final String builderSimpleName,
+                                final String builderVariableName,
+                                final List&lt;BuilderElement&gt; builderElements)
    {
-      return (SHADOW) switch (element.getKind())
-      {
-         case PACKAGE -&gt; new PackageImpl(context, (PackageElement) element);
-         case ENUM, ANNOTATION_TYPE -&gt; new DeclaredImpl(context, (TypeElement) element);
-         case RECORD -&gt; new RecordImpl(context, (TypeElement) element);
-         case CLASS -&gt; new ClassImpl(context, (TypeElement) element);
-         case INTERFACE -&gt; new InterfaceImpl(context, (TypeElement) element);
-         case ENUM_CONSTANT -&gt; new EnumConstantImpl(context, (VariableElement) element);
-         case FIELD -&gt; new FieldImpl(context, (VariableElement) element);
-         case PARAMETER -&gt; new ParameterImpl(context, (VariableElement) element);
-         case TYPE_PARAMETER -&gt; new GenericImpl(context, (TypeParameterElement) element);
-         case MODULE -&gt; new ModuleImpl(context, (ModuleElement) element);
-         case RECORD_COMPONENT -&gt; new RecordComponentImpl(context, (RecordComponentElement) element);
-         case OTHER, STATIC_INIT, INSTANCE_INIT, EXCEPTION_PARAMETER, RESOURCE_VARIABLE, BINDING_VARIABLE, LOCAL_VARIABLE, METHOD, CONSTRUCTOR -&gt;
-               throw new IllegalArgumentException("not implemented");
-      };
+      String fields = builderElements.stream()
+                                     .map(BuilderElement::field)
+                                     .collect(Collectors.joining("\n\n"));
+
+      String mutators = builderElements.stream()
+                                       .map(BuilderElement::mutator)
+                                       .collect(Collectors.joining("\n\n"));
+
+      String setterInvocations = builderElements.stream()
+                                                .map(BuilderElement::toBuildSetter)
+                                                .collect(Collectors.joining("\n\n"));
+      return """
+            package %1$s;
+                  
+            public class %2$s{
+               %3$s
+                  
+            %4$s
+                  
+               public %5$s build() {
+                  %5$s %6$s = new %5$s();
+                  %7$s
+                  return %6$s;
+               }
+            }
+            """.formatted(aClass.getPackage().getQualifiedName(),
+                          builderSimpleName,
+                          fields,
+                          mutators,
+                          toBuildQualifiedName,
+                          builderVariableName,
+                          setterInvocations);
    }
 
    /**
-    * {@link TypeMirror}s represent the abstract code. {@code List&lt;T&gt;} for example.
-    *
-    * @see #generalize(LangModelContext, Element)
+    * Creates a {@link BuilderElement} for each property of the annotated pojo
     */
-   static &lt;SHADOW extends Shadow&gt; SHADOW generalize(LangModelContext context, TypeMirror typeMirror)
+   private BuilderElement renderProperty(final String builderSimpleName,
+                                         final String builderVariableName,
+                                         final LM_Property property)
    {
-      //noinspection unchecked
-      return (SHADOW) switch (typeMirror.getKind())
+      String propertyName = property.getName();
+      String type = renderType(property.getType());
+      String field = "private " + type + " " + propertyName + ";";
+
+      String mutator = """
+               public %1$s with%2$s(%3$s %4$s) {
+                  this.%4$s = %4$s;
+                  return this;
+               }
+            """.formatted(builderSimpleName,
+                          capitalize(propertyName),
+                          type,
+                          propertyName);
+
+      String toBuildSetter = builderVariableName + "." +
+                             property.getSetterOrThrow().getName() +
+                             "(" + propertyName + ");";
+
+      return new BuilderElement(field, mutator, toBuildSetter);
+   }
+
+   /**
+    * Used to render the code needed to render a property in the builder
+    *
+    * @param field ones rendered will hold the values being used to build the pojo
+    * @param mutator ones rendered will set the value of the {@link #field}
+    * @param toBuildSetter ones rendered will modify the build pojo
+    */
+   private record BuilderElement(String field,
+                                 String mutator,
+                                 String toBuildSetter) {}
+
+   private static String renderType(LM_Shadow shadow)
+   {
+      if (shadow instanceof LM_QualifiedNameable qualifiedNameable)
       {
-         case BOOLEAN, BYTE, SHORT, INT, LONG, CHAR, FLOAT, DOUBLE -&gt; new PrimitiveImpl(context, (PrimitiveType) typeMirror);
-         case ARRAY -&gt; new ArrayImpl(context, (ArrayType) typeMirror);
-         case DECLARED -&gt; switch (getTypes(context).asElement(typeMirror).getKind())
-         {
-            case CLASS -&gt; new ClassImpl(context, ((DeclaredType) typeMirror));
-            case INTERFACE -&gt; new InterfaceImpl(context, (DeclaredType) typeMirror);
-            case RECORD -&gt; new RecordImpl(context, (DeclaredType) typeMirror);
-            case ANNOTATION_TYPE, ENUM -&gt; new DeclaredImpl(context, (DeclaredType) typeMirror);
-            default -&gt; throw new IllegalArgumentException("not implemented");
-         };
-         case WILDCARD -&gt; new WildcardImpl(context, (WildcardType) typeMirror);
-         case VOID -&gt; new VoidImpl(context, ((NoType) typeMirror));
-         case PACKAGE -&gt; new PackageImpl(context, (NoType) typeMirror);
-         case MODULE -&gt; new ModuleImpl(context, (NoType) typeMirror);
-         case NULL -&gt; new NullImpl(context, (NullType) typeMirror);
-         case TYPEVAR -&gt; new GenericImpl(context, ((TypeVariable) typeMirror));
-         case INTERSECTION -&gt; new IntersectionImpl(context, ((IntersectionType) typeMirror));
-         case EXECUTABLE, NONE -&gt; throw new IllegalArgumentException("bug in this api: executables should be created using elements");
-         case ERROR, OTHER, UNION -&gt; throw new IllegalArgumentException("not implemented");
-      };
-   }
-
-   static Package generalizePackage(LangModelContext context, NoType aPackage)
-   {
-      return new PackageImpl(context, aPackage);
-   }
-
-   static Package generalizePackage(LangModelContext context, PackageElement packageElement)
-   {
-      return new PackageImpl(context, packageElement);
-   }
-
-   static List&lt;AnnotationUsage&gt; generalize(LangModelContext context, List&lt;? extends AnnotationMirror&gt; annotationMirrors)
-   {
-      return AnnotationUsageImpl.from(context, annotationMirrors);
-   }
-
-   static javax.lang.model.element.AnnotationValue generalize(AnnotationValue annotationValue)
-   {
-      return ((AnnotationValueImpl) annotationValue).getAnnotationValue();
-   }
-
-   static Types getTypes(LangModelContext context)
-   {
-      return ((LangModelContextImplementation) context).getTypes();
-   }
-
-   static Elements getElements(LangModelContext context)
-   {
-      return ((LangModelContextImplementation) context).getElements();
-   }
-}</code></pre>
-</div>
-</div>
-</div>
-</details>
-<details>
-<summary class="title">javax.annotation.processing</summary>
-<div class="content">
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Unresolved include directive in modules/ROOT/pages/index.adoc - include::example$AnnotationProcessingAdapter.java[]</code></pre>
-</div>
-</div>
-</div>
-</details>
-<details>
-<summary class="title">java.lang.reflect</summary>
-<div class="content">
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.api.reflection;
-
-import io.determann.shadow.api.shadow.annotationusage.AnnotationUsage;
-import io.determann.shadow.api.shadow.directive.*;
-import io.determann.shadow.api.shadow.structure.Module;
-import io.determann.shadow.api.shadow.structure.Package;
-import io.determann.shadow.api.shadow.structure.*;
-import io.determann.shadow.api.shadow.type.*;
-import io.determann.shadow.internal.reflection.NamedSupplier;
-import io.determann.shadow.internal.reflection.shadow.*;
-import io.determann.shadow.internal.reflection.shadow.directive.*;
-
-import java.lang.Class;
-import java.lang.Enum;
-import java.lang.Void;
-import java.lang.module.ModuleDescriptor;
-import java.lang.module.ModuleFinder;
-import java.lang.module.ModuleReference;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-public interface ReflectionAdapter
-{
-   public static &lt;SHADOW extends Shadow&gt; SHADOW generalize(Class&lt;?&gt; aClass)
-   {
-      return generalize(aClass, Collections.emptyList());
-   }
-
-   @SuppressWarnings("unchecked")
-   private static &lt;SHADOW extends Shadow&gt; SHADOW generalize(Class&lt;?&gt; aClass, List&lt;Shadow&gt; genericShadows)
-   {
-      if (aClass.isPrimitive())
-      {
-         if (aClass.equals(Void.TYPE))
-         {
-            return (SHADOW) new VoidImpl();
-         }
-         return (SHADOW) new PrimitiveImpl(aClass);
+         return qualifiedNameable.getQualifiedName();
       }
-      if (aClass.isArray())
+      if (shadow instanceof LM_Nameable nameable)
       {
-         return (SHADOW) new ArrayImpl(aClass);
+         return nameable.getName();
       }
-      if (aClass.isRecord())
-      {
-         return (SHADOW) new RecordImpl(aClass, genericShadows);
-      }
-      if (aClass.isAnnotation() || aClass.isEnum())
-      {
-         return (SHADOW) new DeclaredImpl(aClass);
-      }
-      if (aClass.isInterface())
-      {
-         return (SHADOW) new InterfaceImpl(aClass, genericShadows);
-      }
-      return (SHADOW) new ClassImpl(aClass, genericShadows);
-   }
-
-   public static Package generalize(java.lang.Package aPackage)
-   {
-      return new PackageImpl(new NamedSupplier&lt;&gt;(aPackage, java.lang.Package::getName));
-   }
-
-   public static Module generalize(java.lang.Module module)
-   {
-      return new ModuleImpl(new NamedSupplier&lt;&gt;(module.getDescriptor(), ModuleDescriptor::name),
-                            Arrays.stream(module.getAnnotations()).map(ReflectionAdapter::generalize).toList());
-   }
-
-   public static Module getModuleShadow(String name)
-   {
-      return new ModuleImpl(new NamedSupplier&lt;&gt;(name,
-                                                () -&gt; ModuleFinder.ofSystem().find(name).orElseThrow().descriptor(),
-                                                ModuleDescriptor::name));
-   }
-
-   public static Module generalize(ModuleReference moduleReference)
-   {
-      return new ModuleImpl(new NamedSupplier&lt;&gt;(moduleReference.descriptor(), ModuleDescriptor::name));
-   }
-
-   public static Shadow generalize(java.lang.reflect.Type type)
-   {
-      if (type instanceof ParameterizedType parameterizedType)
-      {
-         java.lang.reflect.Type rawType = parameterizedType.getRawType();
-         if (rawType instanceof Class&lt;?&gt; aClass)
-         {
-            return generalize(aClass, Arrays.stream(parameterizedType.getActualTypeArguments()).map(ReflectionAdapter::generalize).toList());
-         }
-         throw new IllegalStateException();
-      }
-      if (type instanceof TypeVariable&lt;?&gt; typeVariable)
-      {
-         return new GenericImpl(typeVariable);
-      }
-      if (type instanceof Class&lt;?&gt; aClass)
-      {
-         return generalize(aClass);
-      }
-      if (type instanceof WildcardType wildcardType)
-      {
-         return new WildcardImpl(wildcardType);
-      }
-      throw new IllegalStateException();
-   }
-
-   public static AnnotationUsage generalize(java.lang.annotation.Annotation annotation)
-   {
-      return new AnnotationUsageImpl(annotation);
-   }
-
-   public static Field generalize(java.lang.reflect.Field field)
-   {
-      return new FieldImpl(field);
-   }
-
-   public static Method generalize(java.lang.reflect.Method method)
-   {
-      return new ExecutableImpl(method);
-   }
-
-   public static Constructor generalize(java.lang.reflect.Constructor&lt;?&gt; constructor)
-   {
-      return new ExecutableImpl(constructor);
-   }
-
-   public static RecordComponent generalize(java.lang.reflect.RecordComponent recordComponent)
-   {
-      return (RecordComponent) new RecordComponentImpl(recordComponent);
-   }
-
-   public static Parameter generalize(java.lang.reflect.Parameter parameter)
-   {
-      return new ParameterImpl(parameter);
-   }
-
-   public static Shadow generalize(TypeVariable&lt;?&gt; typeVariable)
-   {
-      return new GenericImpl(typeVariable);
-   }
-
-   public static Requires generalize(ModuleDescriptor.Requires requires)
-   {
-      return new RequiresImpl(requires);
-   }
-
-   public static Exports generalize(ModuleDescriptor.Exports exports)
-   {
-      return new ExportsImpl(exports);
-   }
-
-   public static Opens generalize(ModuleDescriptor.Opens opens)
-   {
-      return new OpensImpl(opens);
-   }
-
-   public static Provides generalize(ModuleDescriptor.Provides provides)
-   {
-      return new ProvidesImpl(provides);
-   }
-
-   public static Uses getUsesShadow(String uses)
-   {
-      return new UsesImpl(uses);
-   }
-
-   public static Optional&lt;Declared&gt; getDeclared(String qualifiedName)
-   {
-      try
-      {
-         Class&lt;?&gt; aClass = Class.forName(qualifiedName);
-         return Optional.of(generalize(aClass));
-      }
-      catch (ClassNotFoundException e)
-      {
-         return Optional.empty();
-      }
-   }
-
-   public static Executable generalize(java.lang.reflect.Executable executable)
-   {
-      return new ExecutableImpl(executable);
-   }
-
-   public static Package getPackage(String name)
-   {
-      return new PackageImpl(new NamedSupplier&lt;&gt;(name, () -&gt;
-      {
-         java.lang.Package aPackage = java.lang.Package.getPackage(name);
-         if (aPackage == null)
-         {
-            throw new IllegalArgumentException("Package \"" + name + "\" not found. The VM did not load it yet");
-         }
-         return aPackage;
-      }, java.lang.Package::getName));
-   }
-
-   public static EnumConstant generalize(Enum&lt;?&gt; enumConstant)
-   {
-      try
-      {
-         return new EnumConstantImpl(enumConstant.getDeclaringClass().getField(enumConstant.name()));
-      }
-      catch (NoSuchFieldException e)
-      {
-         throw new RuntimeException(e);
-      }
-   }
-
-   public static ModuleDescriptor.Exports particularize(Exports exports)
-   {
-      return ((ExportsImpl) exports).getReflection();
-   }
-
-   public static ModuleDescriptor.Opens particularize(Opens opens)
-   {
-      return ((OpensImpl) opens).getReflection();
-   }
-
-   public static ModuleDescriptor.Provides particularize(Provides provides)
-   {
-      return ((ProvidesImpl) provides).getReflection();
-   }
-
-   public static ModuleDescriptor.Requires particularize(Requires requires)
-   {
-      return ((RequiresImpl) requires).getReflection();
-   }
-
-   public static String particularize(Uses uses)
-   {
-      return ((UsesImpl) uses).getReflection();
-   }
-
-   public static java.lang.annotation.Annotation particularize(AnnotationUsage annotationUsage)
-   {
-      return ((AnnotationUsageImpl) annotationUsage).getAnnotationReflection();
-   }
-
-   public static Class&lt;?&gt; particularize(Array array)
-   {
-      return ((ArrayImpl) array).getReflection();
-   }
-
-   public static Class&lt;?&gt; particularize(Declared declared)
-   {
-      return ((DeclaredImpl) declared).getReflection();
-   }
-
-   public static java.lang.reflect.Field particularize(EnumConstant enumConstant)
-   {
-      return ((ReflectionFieldImpl&lt;?&gt;) enumConstant).getReflection();
-   }
-
-   public static java.lang.reflect.Executable particularize(Executable executable)
-   {
-      return ((ExecutableImpl) executable).getReflection();
-   }
-
-   public static java.lang.reflect.Field particularize(Field field)
-   {
-      return ((ReflectionFieldImpl&lt;?&gt;) field).getReflection();
-   }
-
-   public static TypeVariable&lt;?&gt; particularize(Generic generic)
-   {
-      return ((GenericImpl) generic).getReflection();
-   }
-
-   public static java.lang.reflect.Type[] particularize(Intersection intersection)
-   {
-      return ((IntersectionImpl) intersection).getReflection();
-   }
-
-   public static ModuleDescriptor particularize(Module module)
-   {
-      return ((ModuleImpl) module).getReflection();
-   }
-
-   public static java.lang.Package particularize(Package aPackage)
-   {
-      return ((PackageImpl) aPackage).getReflection();
-   }
-
-   public static java.lang.reflect.Parameter particularize(Parameter parameter)
-   {
-      return ((ParameterImpl) parameter).getReflection();
-   }
-
-   public static java.lang.Class&lt;?&gt; particularize(Primitive primitive)
-   {
-      return ((PrimitiveImpl) primitive).getReflection();
-   }
-
-   public static java.lang.reflect.RecordComponent particularize(RecordComponent recordComponent)
-   {
-      return ((RecordComponentImpl) recordComponent).getReflection();
-   }
-
-   public static WildcardType particularize(Wildcard wildcard)
-   {
-      return ((WildcardImpl) wildcard).getReflection();
+      return shadow.toString();
    }
 }</code></pre>
 </div>
@@ -1073,176 +378,43 @@ public interface ReflectionAdapter
 </div>
 </details>
 </div>
-</details>
-<details>
-<summary class="title">Better rendering of existing sources</summary>
-<div class="content">
-<div class="paragraph">
-<p>A simple method like this</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public abstract class MyClass {
-
-  @MyAnnotation
-  public abstract &lt;T&gt; T get(int index);
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>can be rendered in the following ways</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Rendering</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Shadow AOI</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JDK</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MyAnnotation
-public abstract &lt;T&gt; T get(int index);</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">render(method).declaration()</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MyAnnotation
-public &lt;T&gt; T get(int index) {
-}</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">render(method).declaration("//do stuff")</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">get()</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">render(method).invocation()</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">get(5413)</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">render(method).invocation("5413")</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">&lt;T&gt;get(int)</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">method.toString()</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">methodElement.toString()</code></pre>
-</div>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">&lt;T&gt;(int)T</code></pre>
-</div>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">methodMirror.toString()</code></pre>
-</div>
-</div></div></td>
-</tr>
-</tbody>
-</table>
+<div class="sect1">
+<h2 id="_supported"><a class="anchor" href="#_supported"></a>Supported</h2>
+<div class="sectionbody">
 <div class="ulist">
-<div class="title">Names can be rendered as</div>
 <ul>
 <li>
-<p>QualifiedNames</p>
+<p><a href="Annotation%20Processing.html" class="xref page">Annotation Processing</a></p>
 </li>
 <li>
-<p>SimpleNames</p>
+<p><a href="java.lang.model.html" class="xref page">java.lang.model</a></p>
 </li>
 <li>
-<p>WithoutNeedingImports (default)</p>
+<p><a href="Reflection.html" class="xref page">reflection</a> (experimental)</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>and a Callback can be registered for NameRenderedEvents to create for example imports.</p>
 </div>
 </div>
-</details>
-<div class="sect2">
-<h3 id="_currently_supported_are"><a class="anchor" href="#_currently_supported_are"></a>Currently Supported are:</h3>
-<div class="paragraph">
-<p><a href="Annotation%20Processing.html" class="xref page">Annotation Processing</a></p>
-</div>
-<div class="paragraph">
-<p><a href="java.lang.model.html" class="xref page">java.lang.model</a></p>
-</div>
-<div class="paragraph">
-<p><a href="Reflection.html" class="xref page">reflection</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_api_goals"><a class="anchor" href="#_api_goals"></a>API Goals</h3>
-<div class="sect3">
-<h4 id="_short_term"><a class="anchor" href="#_short_term"></a>Short-term</h4>
-<div class="paragraph">
-<p>Make annotation processing more accessible and easier to comprehend.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_long_term"><a class="anchor" href="#_long_term"></a>Long-term</h4>
-<div class="paragraph">
-<p>Provide an API for any kind of Meta-Programming. annotation processing, reflection, doclet etc.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_project_status"><a class="anchor" href="#_project_status"></a>Project status</h3>
-<div class="paragraph">
-<p>The Annotation Processing API is relativity stable.
-The Reflection API is missing some important parts, like invocations and needs more time.</p>
-</div>
+<div class="sect1">
+<h2 id="_next_goals"><a class="anchor" href="#_next_goals"></a>Next Goals</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>A bunch of Api improvements</p>
+</li>
+<li>
+<p>Move more of the implementation to the <code>shadow-implementation-support</code> module for better consistency and easier support of multiple implementations</p>
+</li>
+<li>
+<p>Support the complete Lexical Structure</p>
+</li>
+<li>
+<p>Create a maven archetype to reduce the effort of supporting new Metaprogramming Implementations</p>
+</li>
+</ul>
 </div>
 </div>
 </div>

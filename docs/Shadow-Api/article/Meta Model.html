@@ -106,11 +106,11 @@
 <h2 id="_implementations_define_the_featureset"><a class="anchor" href="#_implementations_define_the_featureset"></a>Implementations define the featureset</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Meta programming is hard.
+<p>Metaprogramming is hard.
 One of the reasons is that there are a lot of different apis each with their own philosophy, design, quirks limitations and pitfalls.
 This leads to a high barrier of entry and a lot of cognitive complexity.
 There are some projects implemented with technology <strong>A</strong> that should use <strong>B</strong>, but are unable to switch.
-This project aims to provide one api for meta programming.
+This project aims to provide one api for Metaprogramming.
 At the center of it is the <strong>meta model api</strong> that represents the source code.</p>
 </div>
 <div class="paragraph">
@@ -121,11 +121,11 @@ There is one implementation module for reflection and one for annotation process
 </div>
 <div class="paragraph">
 <p>The <strong>meta model api</strong> is consumed by two clients.
-There is the user of a specific meta programing api like reflection.
+There is the user of a specific Metaprogramming  api like reflection.
 And features for every meta programming type like rendering.</p>
 </div>
 <div class="ulist">
-<div class="title">When using a specific type of meta programming the api needs to:</div>
+<div class="title">When using a specific type of Metaprogramming the api needs to:</div>
 <ul>
 <li>
 <p>be feature complete</p>
@@ -600,7 +600,7 @@ In this state the api is annoying and unintuitive to use.</p>
 <p>The requirements of the two clients are so different that two apis are beneficial.</p>
 </div>
 <div class="paragraph">
-<p>The preferred api for specific meta programming implementations like reflection is "Duplicate Model".
+<p>The preferred api for specific Metaprogramming implementations like reflection is "Duplicate Model".
 It provides the best discoverability together with "Generic" and has the lowest barrier of entry.
 This can not be used for common features as there are simply no methods to call in the core module.</p>
 </div>

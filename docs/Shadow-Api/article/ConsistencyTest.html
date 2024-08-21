@@ -106,7 +106,7 @@
 <h2 id="_intro"><a class="anchor" href="#_intro"></a>Intro</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Java SE and the Java ecosystem offer a multitude of meta programming APIs.
+<p>Java SE and the Java ecosystem offer a multitude of Metaprogramming APIs.
 They serve the same purpose just in different contexts.
 Annotation processing to analyse classes in the during compilation process, or Reflection to do the same at runtime.
 They have context dependent differences.
@@ -117,11 +117,11 @@ With these differences acounted for, there is still a lot of API surface left th
 But is it?</p>
 </div>
 <div class="paragraph">
-<p>This project is an Abstraction for meta-programming.</p>
+<p>This project is an Abstraction for Metaprogramming</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/Overview.svg" alt="Overview" width="80%">
+<img src="../_images/Overview.svg" alt="Overview" width="80%">
 </div>
 </div>
 <div class="sect2">
@@ -137,24 +137,24 @@ Accessing fields may or may not be supported.</p>
 void request()
 {
    //adapter for the reflection api
-   Class systemClass = ReflectionAdapter.generalize(System.class);
+   C_Class systemClass = R_Adapter.generalize(System.class);
    //request the field "out" for the class java.lang.System
-   Response&lt;Field&gt; out = Provider.request(systemClass,
-                                          Operations.DECLARED_GET_FIELD,
-                                          "out");
+   Response&lt;C_Field&gt; out = Provider.request(systemClass,
+                                            Operations.DECLARED_GET_FIELD,
+                                            "out");
 
    switch (out)
    {
       //the implementation may not support this operation
       //e.g. it's impossible to access fields with reflection
-      case Response.Unsupported&lt;Field&gt; unsupported -&gt; Assertions.fail();
+      case Response.Unsupported&lt;C_Field&gt; unsupported -&gt; Assertions.fail();
       //the implementation may support this operation, but there is no
       //result for this instance
       //e.g. the class java.lang.System does not have a field called "out"
-      case Response.Empty&lt;Field&gt; empty -&gt; Assertions.fail();
+      case Response.Empty&lt;C_Field&gt; empty -&gt; Assertions.fail();
       //accessing fields via reflection is possible and java.lang.System
       //does have a field called "out" therefore a result is expected
-      case Response.Result&lt;Field&gt; result -&gt; assertNotNull(result.value());
+      case Response.Result&lt;C_Field&gt; result -&gt; assertNotNull(result.value());
    }
 }</code></pre>
 </div>
@@ -168,12 +168,12 @@ void request()
 void requestOrEmpty()
 {
    //adapter for the reflection api
-   Class systemClass = ReflectionAdapter.generalize(System.class);
+   C_Class systemClass = R_Adapter.generalize(System.class);
    //request the field "out" for the class java.lang.System.
    //If its unsupported an Empty Optional is returned
-   Optional&lt;Field&gt; out = Provider.requestOrEmpty(systemClass,
-                                                 Operations.DECLARED_GET_FIELD,
-                                                 "out");
+   Optional&lt;C_Field&gt; out = Provider.requestOrEmpty(systemClass,
+                                                   Operations.DECLARED_GET_FIELD,
+                                                   "out");
 
    assertTrue(out.isPresent());
 }</code></pre>
@@ -185,12 +185,12 @@ void requestOrEmpty()
 void requestOrThrow()
 {
    //adapter for the reflection api
-   Class systemClass = ReflectionAdapter.generalize(System.class);
+   C_Class systemClass = R_Adapter.generalize(System.class);
    //request the field "out" for the class java.lang.System.
    //If its unsupported an Exception is thrown
-   Field out = Provider.requestOrThrow(systemClass,
-                                       Operations.DECLARED_GET_FIELD,
-                                       "out");
+   C_Field out = Provider.requestOrThrow(systemClass,
+                                         Operations.DECLARED_GET_FIELD,
+                                         "out");
 
    assertNotNull(out);
 }</code></pre>
@@ -217,8 +217,8 @@ void classDeclarationRendering()
    String expectedCode =
          "public class DependentGenerics&lt;A extends Comparable&lt;B&gt;, B extends Comparable&lt;A&gt;&gt; {}\n";
 
-   compileTime(c -&gt; c.getClassOrThrow("DependentGenerics"))
-         .runtime(cl -&gt; ReflectionAdapter.generalize(cl.apply("DependentGenerics")))
+   ConsistencyTest.&lt;C_Class&gt;compileTime(c -&gt; c.getClassOrThrow("DependentGenerics"))
+         .runtime(cl -&gt; R_Adapter.generalize(cl.apply("DependentGenerics")))
          .withCode("DependentGenerics.java", code)
          .test(aClass -&gt; assertEquals(expectedCode, render(DEFAULT, aClass).declaration()));
 }</code></pre>
@@ -529,12 +529,11 @@ void constructorReceiver()
 <div class="sect2">
 <h3 id="_conclusion"><a class="anchor" href="#_conclusion"></a>Conclusion</h3>
 <div class="paragraph">
-<p>Meta programming Apis scale with the complexity of the language.
+<p>Metaprogramming Apis scale with the complexity of the language.
 Java has many features.
 The Reflection and Annotation-Processing Apis cover a lot of them.
 The only inconsistencies I found are in rarely used Apis for rarely used language features.
-Both are reported.
-I&#8217;d like to support the <a href="https://openjdk.org/jeps/466">Class-File API</a> in the short to midterm and test its consistency too.</p>
+Both are reported.</p>
 </div>
 </div>
 </div>
