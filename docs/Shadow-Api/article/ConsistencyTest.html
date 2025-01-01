@@ -160,7 +160,7 @@ void request()
 </div>
 </div>
 <div class="paragraph">
-<p>Or use a convenience method if <code>Optional.empty()</code> or throwing an Exception is a fitting default behavior.</p>
+<p>Or use a convenience method if <code>Optional.empty()</code> or throwing an <code>Exception</code> is a fitting default behavior.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -200,27 +200,34 @@ void requestOrThrow()
 <div class="sect2">
 <h3 id="_consistency_tests"><a class="anchor" href="#_consistency_tests"></a>Consistency Tests</h3>
 <div class="paragraph">
-<p>Testing consistency works like this.
+<p>Consistency Tests are written in the Style of a Technology Compatibility Kit (TCK).
+Testing consistency works like this.
 We start with a String representation of some code.
 This code gets compiled using the <code>javax.tools.JavaCompiler</code> and the Annotation processing part is executed and tested with the consumer supplied to the method "test".
 The compiled code is intercepted and loaded with a custom Classloader into the runtime.
-There the reflection part is executed and tested with the same consumer.</p>
+There the reflection part is executed and tested.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
 void classDeclarationRendering()
 {
-   String code =
-         "public class DependentGenerics&lt;A extends Comparable&lt;B&gt;, B extends Comparable&lt;A&gt;&gt; {}";
+   String expected =
+   "public class InterpolateGenericsExample&lt;A extends Comparable&lt;B&gt;, B extends Comparable&lt;A&gt;&gt; {}\n";
 
-   String expectedCode =
-         "public class DependentGenerics&lt;A extends Comparable&lt;B&gt;, B extends Comparable&lt;A&gt;&gt; {}\n";
+   String name = "InterpolateGenericsExample.java";
+   String content =
+   "public class InterpolateGenericsExample&lt;A extends Comparable&lt;B&gt;, B extends Comparable&lt;A&gt;&gt; {}";
+   TckTest.withSource(name, content)
+          .test(implementation -&gt;
+               {
+                  C_Class cClass = Provider.requestOrThrow(implementation,
+                                                           Operations. GET_CLASS,
+                                                           "InterpolateGenericsExample");
 
-   ConsistencyTest.&lt;C_Class&gt;compileTime(c -&gt; c.getClassOrThrow("DependentGenerics"))
-         .runtime(cl -&gt; R_Adapter.generalize(cl.apply("DependentGenerics")))
-         .withCode("DependentGenerics.java", code)
-         .test(aClass -&gt; assertEquals(expectedCode, render(DEFAULT, aClass).declaration()));
+                  assertEquals(expected, Renderer.render(RenderingContext.DEFAULT, cClass)
+                                                 .declaration());
+               });
 }</code></pre>
 </div>
 </div>
@@ -244,7 +251,7 @@ void classDeclarationRendering()
 <div class="ulist">
 <ul>
 <li>
-<p><code>request(NAMEABLE_GET_NAME, class)</code> and others used internally by the render</p>
+<p><code>Provider.request(Operations.NAMEABLE_GET_NAME, aClass)</code> and others used internally by the render</p>
 </li>
 </ul>
 </div>
