@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>How are Annotation Processors loaded? :: Shadow Api</title>
+    <meta name="generator" content="Antora 3.1.10">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <a href="#">Shadow Api</a>
+            </div>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <a class="navbar-item" href="../index.html">Home</a>
+                <a class="navbar-item" href="../Annotation%20Processing.html">Implementations</a>
+                <a class="navbar-item" href="Meta%20Model.html">Articles</a>
+                <a class="navbar-item" href="https://github.com/LukasDetermann/shadow">
+                    <span class="icon">
+                        <svg aria-hidden="true" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 98 96">
+                            <path fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
+                                  fill="#fff"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header><div class="body">
+<div class="nav-container" data-component="Shadow-Api" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../index.html">Shadow-Api</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Implementations</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../Annotation%20Processing.html">Annotation Processing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../Reflection.html">reflection</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../java.lang.model.html">java.lang.model</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Articles</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ConsistencyTest.html">Consistency Testing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Meta%20Model.html">Meta Model</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="AptLoading.html">Annotation Processor loading</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Shadow-Api</a></li>
+    <li>Articles</li>
+    <li><a href="AptLoading.html">Annotation Processor loading</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">How are Annotation Processors loaded?</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>If configured explicitly in any way it works as expected.
+How auto-detection works is a longer story.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_java_compiler"><a class="anchor" href="#_java_compiler"></a>Java Compiler</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Pseudocode of the Java Compiler (javac) in Jdk 23</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static List&lt;AnnotationProcessor&gt; accumulateAllProcessors(
+      String[] args,
+      //source: javax.tools.JavaCompiler.CompilationTask#setProcessors(java.lang.Iterable)
+      List&lt;AnnotationProcessor&gt; programmaticallySetProcessors) {
+
+   //source: com.sun.tools.javac.main.JavaCompiler.initProcessAnnotations()
+   if (isOptionSet(args, "-proc:", "none"))
+   {
+      return Collections.emptyList();
+   }
+
+   List&lt;AnnotationProcessor&gt; annotationProcessors =
+         getAnnotationProcessors(args, programmaticallySetProcessors);
+
+   if (annotationProcessors.isEmpty() &amp;&amp; !annotationProcessingRequested(args))
+   {
+      return Collections.emptyList();
+   }
+   return annotationProcessors;
+}
+
+//source: com.sun.tools.javac.main.JavaCompiler.explicitAnnotationProcessingRequested()
+private static boolean annotationProcessingRequested(String[] args) {
+
+   return isOptionSet(args, "-processor") ||
+          isOptionSet(args, "-processorpath") ||//alias --processor-path
+          isOptionSet(args, "--processor-module-path") ||
+          isOptionSet(args, "-proc:", "only") ||
+          isOptionSet(args, "-proc:", "full") ||
+          isOptionSet(args, "-A") ||
+          isOptionSet(args, "-Xprint") ||
+          hasLocation(ANNOTATION_PROCESSOR_PATH);
+}
+
+//source: com.sun.tools.javac.processing.JavacProcessingEnvironment.initProcessorIterator
+private static List&lt;AnnotationProcessor&gt; getAnnotationProcessors(
+      String[] args,
+      List&lt;AnnotationProcessor&gt; programmaticallySetProcessors) {
+
+   if (isOptionSet(args, "-Xprint"))<i class="conum" data-value="1"></i><b>(1)</b>
+   {
+      return List.of(new PrintingProcessor());
+   }
+   if (programmaticallySetProcessors != null)<i class="conum" data-value="2"></i><b>(2)</b>
+   {
+      return programmaticallySetProcessors;
+   }
+   List&lt;String&gt; processorNames = getOption(args, "-processor");<i class="conum" data-value="3"></i><b>(3)</b>
+   if (processorNames != null)
+   {
+      return loadAnnotationProcessorsByNames(processorNames);
+   }
+   return automaticlyFindAnnotationProcessors();
+}
+
+//source: com.sun.tools.javac.processing.JavacProcessingEnvironment#initProcessorLoader())
+private static List&lt;AnnotationProcessor&gt; automaticlyFindAnnotationProcessors()
+{
+   if (hasLocation(ANNOTATION_PROCESSOR_MODULE_PATH))
+   {
+      return loadAnnotationProcessors(ANNOTATION_PROCESSOR_MODULE_PATH);<i class="conum" data-value="4"></i><b>(4)</b>
+   }
+   if (hasLocation(ANNOTATION_PROCESSOR_PATH))
+   {
+      return loadAnnotationProcessors(ANNOTATION_PROCESSOR_PATH);<i class="conum" data-value="5"></i><b>(5)</b>
+   }
+   return loadAnnotationProcessors(CLASS_PATH);<i class="conum" data-value="6"></i><b>(6)</b>
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configurations"><a class="anchor" href="#_configurations"></a>Configurations</h3>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>-Xprint</code>
+<div class="paragraph">
+<p>With this command line Option a build in javac Annotation processor is used to print everything it sees about a class.</p>
+</div>
+<div class="listingblock">
+<div class="title"><code>-Xprint</code> input</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.article.apt_loading;
+
+public class HelloWorld {
+   public static void main(String[] args) {
+      System.out.println("Hello, World!");
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Annotation processors can not access the content of methods.
+But default Constructors are present.
+It&#8217;s an easy way to get familiar with the code mode an Annotation processor can use.</p>
+</div>
+<div class="listingblock">
+<div class="title"><code>-Xprint</code> result</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.article.apt_loading;
+
+public class HelloWorld {
+
+  public HelloWorld();
+
+  public static void main(java.lang.String[] args);
+}</code></pre>
+</div>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>programmaticallySetProcessors</code>
+The Java compiler has a programmatic Api where Annotation Processors can be set.
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
+import javax.tools.JavaFileObject;
+import java.util.List;
+
+public class HelloCompiler {
+
+   public static void main(String[] args) {
+
+      JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+      List&lt;JavaFileObject&gt; javaFileObjects = createJavaFileObjects();
+
+      JavaCompiler.CompilationTask compilationTask =
+         compiler.getTask(null, null, null, null, null, javaFileObjects);
+
+      //Set processors programaticly
+      List&lt;Processor&gt; myProcessors = getProcessors();
+      compilationTask.setProcessors(myProcessors);
+      compilationTask.call();
+   }
+}</code></pre>
+</div>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>-processor</code>
+With this command line Option a List of Annotation processors can be set
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">javac -processor MyAnnotationProcessor HelloWorld.java</code></pre>
+</div>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>--processor-module-path</code>
+The Module path for Annotation Processors should be used if the processor and all dependencies are modules.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>--processor-path</code> or <code>-processorpath</code>
+Should be used if an Annotation Processors or one of its dependencies is not a module</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><code>--class-path</code>
+The path for user class files and Annotation Processors.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven"><a class="anchor" href="#_maven"></a>Maven</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_without_configuration"><a class="anchor" href="#_without_configuration"></a><a href="https://stackoverflow.com/a/46571387">Without configuration</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_not_modularised"><a class="anchor" href="#_not_modularised"></a>Not Modularised</h3>
+<div class="paragraph">
+<p>Maven puts everything on the class-path including the source files that are being compiled.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modularised"><a class="anchor" href="#_modularised"></a>Modularised</h3>
+<div class="paragraph">
+<p>Maven puts all referenced modules on the module-path and every other dependency on the class-path.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><code>-processor</code> can be set as
+<a href="https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#annotationProcessors">&lt;annotationProcessors&gt;</a></p>
+</li>
+<li>
+<p><code>--processor-module-path</code>
+<a href="https://issues.apache.org/jira/browse/MCOMPILER-412">is not supported</a></p>
+</li>
+<li>
+<p><code>--processor-path</code> can be set as
+<a href="https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#annotationProcessorPaths">&lt;annotationProcessorPaths&gt;</a></p>
+</li>
+<li>
+<p><code>-proc</code> can be set as
+<a href="https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#proc">&lt;proc&gt;</a></p>
+</li>
+<li>
+<p>Per default maven docent use the dependency management section to resolve transitive dependencies in Annotation Processors
+<a href="https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#annotationProcessorPathsUseDepMgmt">&lt;annotationProcessorPathsUseDepMgmt&gt;</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_java_version_changes"><a class="anchor" href="#_java_version_changes"></a>Java Version Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://www.oracle.com/java/technologies/javase/23-relnote-issues.html#JDK-8321314">Since java 23</a>
+ Annotation Processing has to be explicitly requested and is no longer on per default.
+The official documentation is not all up to date.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_common_cases"><a class="anchor" href="#_common_cases"></a>Common Cases</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_writing_an_annotation_processor"><a class="anchor" href="#_writing_an_annotation_processor"></a>Writing an Annotation Processor</h3>
+<div class="paragraph">
+<p>Class-path scanning should be used with caution when writing a processor.
+The sources that are being compiled are on the class-path and
+<a href="https://issues.apache.org/jira/projects/MCOMPILER/issues/MCOMPILER-97">javac will try to compile the Processor using the Processor.</a></p>
+</div>
+<div class="sect3">
+<h4 id="_required_modularized_processors"><a class="anchor" href="#_required_modularized_processors"></a>Required Modularized Processors</h4>
+<div class="paragraph">
+<p>If you want to use Annotation Processors to write your Processor both are modules and one requires the other, then the other processors will be put on the module-path and can not be automatically discovered.
+Some configuration is needed.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_java_23"><a class="anchor" href="#_java_23"></a>java &gt;= 23</h4>
+<div class="paragraph">
+<p>If you want to use Annotation Processors to write your Processors you have to enable them.
+I would recommend to explicitly configure them.
+Just using <code>-proc:full</code> may cause problems.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_java_23_2"><a class="anchor" href="#_java_23_2"></a>java &lt; 23</h4>
+<div class="paragraph">
+<p>You will need to tell javac that compiling a processor with itself doesn&#8217;t work.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_annotation_processors"><a class="anchor" href="#_using_annotation_processors"></a>Using Annotation Processors</h3>
+<div class="sect3">
+<h4 id="_required_modularized_processors_2"><a class="anchor" href="#_required_modularized_processors_2"></a>Required Modularized Processors</h4>
+<div class="paragraph">
+<p>If a Processor is modularised and required by the module that&#8217;s being compiled it will be put on the module-path and can not be automatically discovered.
+Some configuration is needed.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_java_23_3"><a class="anchor" href="#_java_23_3"></a>java &gt;= 23</h4>
+<div class="paragraph">
+<p>Since Java 23 Annotation Processing is disabled by default. <code>-proc:full</code> re-enables it.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_java_23_4"><a class="anchor" href="#_java_23_4"></a>java &lt; 23</h4>
+<div class="paragraph">
+<p>In java versions before 23, Annotation Processors are automatically detected and run without configuration.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion"><a class="anchor" href="#_conclusion"></a>Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I would recommend to explicitly configure Annotation Processors in any case.
+Its more work, but leads to an easier understanding of the build process.
+It avoids some pitfalls.
+Who would expect an Annotation Processor to stop working, just because its now required?</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deliberate_simplifications"><a class="anchor" href="#_deliberate_simplifications"></a>Deliberate Simplifications</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Loading Annotation Processors is lazy</p>
+</li>
+<li>
+<p>Before each round, except the last, javac tries to find more</p>
+</li>
+<li>
+<p>There are two class paths. one for javac and one for annotation processors in javac</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+    <p>The Ui for this site is based in part on the <a href="https://gitlab.com/antora/antora-ui-default">Antora Default UI</a></p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
