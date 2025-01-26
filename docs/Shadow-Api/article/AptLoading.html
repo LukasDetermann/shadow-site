@@ -108,8 +108,8 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>If configured explicitly in any way it works as expected.
-How auto-detection works is a longer story.</p>
+<p>If explicitly configured, it works as expected.
+The process of auto-detection, however, is more complex and requires a detailed explanation.</p>
 </div>
 </div>
 </div>
@@ -199,10 +199,10 @@ private static List&lt;AnnotationProcessor&gt; automaticlyFindAnnotationProcesso
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td><code>-Xprint</code>
 <div class="paragraph">
-<p>With this command line Option a build in javac Annotation processor is used to print everything it sees about a class.</p>
+<p>With this command line Option a build in javac Annotation Processor is used to print everything it sees about a class.</p>
 </div>
 <div class="listingblock">
-<div class="title"><code>-Xprint</code> input</div>
+<div class="title"><code>javac -Xprint HelloWorld.java</code></div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.article.apt_loading;
 
@@ -214,12 +214,12 @@ public class HelloWorld {
 </div>
 </div>
 <div class="paragraph">
-<p>Annotation processors can not access the content of methods.
+<p>Annotation Processors can not access the content of methods.
 But default Constructors are present.
-It&#8217;s an easy way to get familiar with the code mode an Annotation processor can use.</p>
+It&#8217;s an easy way to get familiar with the code mode an Annotation Processor can use.</p>
 </div>
 <div class="listingblock">
-<div class="title"><code>-Xprint</code> result</div>
+<div class="title">result</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.article.apt_loading;
 
@@ -265,7 +265,7 @@ public class HelloCompiler {
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
 <td><code>-processor</code>
-With this command line Option a List of Annotation processors can be set
+With this command line Option a List of Annotation Processors can be set
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">javac -processor MyAnnotationProcessor HelloWorld.java</code></pre>
@@ -295,29 +295,23 @@ The path for user class files and Annotation Processors.</td>
 <div class="sect1">
 <h2 id="_maven"><a class="anchor" href="#_maven"></a>Maven</h2>
 <div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_without_configuration"><a class="anchor" href="#_without_configuration"></a><a href="https://stackoverflow.com/a/46571387">Without configuration</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_not_modularised"><a class="anchor" href="#_not_modularised"></a>Not Modularised</h3>
+<h3 id="_without_configuration"><a class="anchor" href="#_without_configuration"></a><a href="https://stackoverflow.com/a/46571387">Without configuration</a></h3>
+<div class="sect3">
+<h4 id="_not_modularised"><a class="anchor" href="#_not_modularised"></a>Not Modularised</h4>
 <div class="paragraph">
 <p>Maven puts everything on the class-path including the source files that are being compiled.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_modularised"><a class="anchor" href="#_modularised"></a>Modularised</h3>
+<div class="sect3">
+<h4 id="_modularised"><a class="anchor" href="#_modularised"></a>Modularised</h4>
 <div class="paragraph">
 <p>Maven puts all referenced modules on the module-path and every other dependency on the class-path.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -344,6 +338,7 @@ The path for user class files and Annotation Processors.</td>
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
 <h2 id="_java_version_changes"><a class="anchor" href="#_java_version_changes"></a>Java Version Changes</h2>
 <div class="sectionbody">
@@ -362,7 +357,7 @@ The official documentation is not all up to date.</p>
 <div class="paragraph">
 <p>Class-path scanning should be used with caution when writing a processor.
 The sources that are being compiled are on the class-path and
-<a href="https://issues.apache.org/jira/projects/MCOMPILER/issues/MCOMPILER-97">javac will try to compile the Processor using the Processor.</a></p>
+<a href="https://issues.apache.org/jira/browse/MCOMPILER-97">javac will try to compile the Processor using itself.</a></p>
 </div>
 <div class="sect3">
 <h4 id="_required_modularized_processors"><a class="anchor" href="#_required_modularized_processors"></a>Required Modularized Processors</h4>
@@ -422,7 +417,7 @@ Who would expect an Annotation Processor to stop working, just because its now r
 </div>
 </div>
 <div class="sect1">
-<h2 id="_deliberate_simplifications"><a class="anchor" href="#_deliberate_simplifications"></a>Deliberate Simplifications</h2>
+<h2 id="_simplifications"><a class="anchor" href="#_simplifications"></a>Simplifications</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -430,10 +425,10 @@ Who would expect an Annotation Processor to stop working, just because its now r
 <p>Loading Annotation Processors is lazy</p>
 </li>
 <li>
-<p>Before each round, except the last, javac tries to find more</p>
+<p>Before each round, except the last, javac tries to find more Processors</p>
 </li>
 <li>
-<p>There are two class paths. one for javac and one for annotation processors in javac</p>
+<p>There are two class paths. one for javac and one for Annotation Processors in javac</p>
 </li>
 </ul>
 </div>
