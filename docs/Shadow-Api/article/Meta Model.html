@@ -416,7 +416,7 @@ public static  &lt;TO_QUERY, RESULT&gt; RESULT getOrThrow(TO_QUERY toQuery, Quer
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Query&lt;TO_QUERY, RESULT&gt; extends Function&lt;TO_QUERY, RESULT&gt; {
 
    @Override
-   public RESULT apply(TO_QUERY toQuery);
+   RESULT apply(TO_QUERY toQuery);
 }</code></pre>
 </div>
 </div>
@@ -459,7 +459,7 @@ public static ReflectionMethod query(Method method) {
 }
 
 public interface ReflectionNameable {
-   public String getName();
+   String getName();
 }
 
 public interface ReflectionMethod extends ReflectionNameable {
@@ -502,7 +502,7 @@ public interface ExecutableQuery {
 
 public interface MethodQuery extends ExecutableQuery {
 
-   public void getName();
+   void getName();
 }</code></pre>
 </div>
 </div>
@@ -548,7 +548,7 @@ public interface ExecutableConverter&lt;T&gt; {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Query&lt;TO_QUERY, RESULT&gt; {
 
-   public static &lt;TO_QUERY extends T, T&gt; Queryable&lt;T&gt; query(TO_QUERY toQuery) {
+   static &lt;TO_QUERY extends T, T&gt; Queryable&lt;T&gt; query(TO_QUERY toQuery) {
    }
 }
 
@@ -617,7 +617,7 @@ This can not be used for common features as there are simply no methods to call 
 
 public interface Operations {
 
-   public static Operation&lt;Nameable, String&gt; NAMEABLE_NAME = new Operation&lt;&gt;("nameable.name");
+   static Operation&lt;Nameable, String&gt; NAMEABLE_NAME = new Operation&lt;&gt;("nameable.name");
 }
 
 public interface ProviderSpi {
@@ -630,11 +630,11 @@ public sealed interface Response&lt;T&gt; {
    /**
     * Equivalent to Optional.empty to prevent to much nesting
     */
-   public final class Empty&lt;T&gt; implements Response&lt;T&gt; {}
+   final class Empty&lt;T&gt; implements Response&lt;T&gt; {}
 
-   public final class Unsupported&lt;T&gt; implements Response&lt;T&gt; {}
+   final class Unsupported&lt;T&gt; implements Response&lt;T&gt; {}
 
-   public record Result&lt;T&gt;(T value) implements Response&lt;T&gt; {}
+   record Result&lt;T&gt;(T value) implements Response&lt;T&gt; {}
 }</code></pre>
 </div>
 </div>

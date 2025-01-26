@@ -135,7 +135,7 @@ The process of auto-detection, however, is more complex and requires a detailed 
    List&lt;AnnotationProcessor&gt; annotationProcessors =
          getAnnotationProcessors(args, programmaticallySetProcessors);
 
-   if (annotationProcessors.isEmpty() &amp;&amp; !annotationProcessingRequested(args))
+   if (annotationProcessors.isEmpty() || !annotationProcessingRequested(args))
    {
       return Collections.emptyList();
    }
@@ -331,7 +331,7 @@ The path for user class files and Annotation Processors.</td>
 <a href="https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#proc">&lt;proc&gt;</a></p>
 </li>
 <li>
-<p>Per default maven docent use the dependency management section to resolve transitive dependencies in Annotation Processors
+<p>Per default maven doesn&#8217;t use the dependency management section to resolve transitive dependencies in Annotation Processors
 <a href="https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#annotationProcessorPathsUseDepMgmt">&lt;annotationProcessorPathsUseDepMgmt&gt;</a></p>
 </li>
 </ul>
