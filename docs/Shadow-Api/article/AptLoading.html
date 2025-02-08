@@ -108,8 +108,14 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>If explicitly configured, it works as expected.
-The process of auto-detection, however, is more complex and requires a detailed explanation.</p>
+<p>Annotation Processors can be loaded in many different ways.
+Some straight forward and some more indirect.
+In this article I want to document how the loading of Annotation Processors works and what Pitfalls there are.</p>
+</div>
+<div class="paragraph">
+<p>Tldr: Configure them explicitly as
+<a href="https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#annotationProcessorPaths">&lt;annotationProcessorPaths&gt;</a>
+or with <a href="https://issues.apache.org/jira/browse/MCOMPILER-412">this workaround</a> for the jpms.</p>
 </div>
 </div>
 </div>
@@ -117,34 +123,28 @@ The process of auto-detection, however, is more complex and requires a detailed 
 <h2 id="_java_compiler"><a class="anchor" href="#_java_compiler"></a>Java Compiler</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>Pseudocode of the Java Compiler (javac) in Jdk 23</strong></p>
+<p>Annotation Processors are loaded by the Java Compiler (javac).
+This Pseudocode explains how.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static List&lt;AnnotationProcessor&gt; accumulateAllProcessors(
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static List&lt;AnnotationProcessor&gt; getAnnotationProcessors(
       String[] args,
-      //source: javax.tools.JavaCompiler.CompilationTask#setProcessors(java.lang.Iterable)
-      List&lt;AnnotationProcessor&gt; programmaticallySetProcessors) {
+      List&lt;AnnotationProcessor&gt; programmaticallySetProcessors)
+{     //source: javax.tools.JavaCompiler.CompilationTask#setProcessors(java.lang.Iterable)
 
    //source: com.sun.tools.javac.main.JavaCompiler.initProcessAnnotations()
-   if (isOptionSet(args, "-proc:", "none"))
+   if (isOptionSet(args, "-proc:", "none") || !isRequested(args))
    {
       return Collections.emptyList();
    }
 
-   List&lt;AnnotationProcessor&gt; annotationProcessors =
-         getAnnotationProcessors(args, programmaticallySetProcessors);
-
-   if (annotationProcessors.isEmpty() || !annotationProcessingRequested(args))
-   {
-      return Collections.emptyList();
-   }
-   return annotationProcessors;
+   return chooseProcessors(args, programmaticallySetProcessors);
 }
 
 //source: com.sun.tools.javac.main.JavaCompiler.explicitAnnotationProcessingRequested()
-private static boolean annotationProcessingRequested(String[] args) {
-
+private static boolean isRequested(String[] args)
+{
    return isOptionSet(args, "-processor") ||
           isOptionSet(args, "-processorpath") ||//alias --processor-path
           isOptionSet(args, "--processor-module-path") ||
@@ -156,10 +156,10 @@ private static boolean annotationProcessingRequested(String[] args) {
 }
 
 //source: com.sun.tools.javac.processing.JavacProcessingEnvironment.initProcessorIterator
-private static List&lt;AnnotationProcessor&gt; getAnnotationProcessors(
+private static List&lt;AnnotationProcessor&gt; chooseProcessors(
       String[] args,
-      List&lt;AnnotationProcessor&gt; programmaticallySetProcessors) {
-
+      List&lt;AnnotationProcessor&gt; programmaticallySetProcessors)
+{
    if (isOptionSet(args, "-Xprint"))<i class="conum" data-value="1"></i><b>(1)</b>
    {
       return List.of(new PrintingProcessor());
@@ -173,11 +173,11 @@ private static List&lt;AnnotationProcessor&gt; getAnnotationProcessors(
    {
       return loadAnnotationProcessorsByNames(processorNames);
    }
-   return automaticlyFindAnnotationProcessors();
+   return automaticDetection();
 }
 
 //source: com.sun.tools.javac.processing.JavacProcessingEnvironment#initProcessorLoader())
-private static List&lt;AnnotationProcessor&gt; automaticlyFindAnnotationProcessors()
+private static List&lt;AnnotationProcessor&gt; automaticDetection()
 {
    if (hasLocation(ANNOTATION_PROCESSOR_MODULE_PATH))
    {
@@ -265,7 +265,8 @@ public class HelloCompiler {
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
 <td><code>-processor</code>
-With this command line Option a List of Annotation Processors can be set
+With this command line Option a List of Annotation Processors can be set via their name.
+This is basically a filter for one of the other options or the classpath.
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">javac -processor MyAnnotationProcessor HelloWorld.java</code></pre>
@@ -295,6 +296,10 @@ The path for user class files and Annotation Processors.</td>
 <div class="sect1">
 <h2 id="_maven"><a class="anchor" href="#_maven"></a>Maven</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>During a build the build tool needs to invoke javac.
+This is how maven does it.</p>
+</div>
 <div class="sect2">
 <h3 id="_without_configuration"><a class="anchor" href="#_without_configuration"></a><a href="https://stackoverflow.com/a/46571387">Without configuration</a></h3>
 <div class="sect3">
