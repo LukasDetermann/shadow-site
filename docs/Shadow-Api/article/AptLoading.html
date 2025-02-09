@@ -168,16 +168,21 @@ private static List&lt;AnnotationProcessor&gt; chooseProcessors(
    {
       return programmaticallySetProcessors;
    }
+
+   List&lt;AnnotationProcessor&gt; processors = loadProcessors();
+
    List&lt;String&gt; processorNames = getOption(args, "-processor");<i class="conum" data-value="3"></i><b>(3)</b>
    if (processorNames != null)
    {
-      return loadAnnotationProcessorsByNames(processorNames);
+      return processors.stream()
+                       .filter(p -&gt; processorNames.contains(p.getName()))
+                       .toList();
    }
-   return automaticDetection();
+   return processors;
 }
 
 //source: com.sun.tools.javac.processing.JavacProcessingEnvironment#initProcessorLoader())
-private static List&lt;AnnotationProcessor&gt; automaticDetection()
+private static List&lt;AnnotationProcessor&gt; loadProcessors()
 {
    if (hasLocation(ANNOTATION_PROCESSOR_MODULE_PATH))
    {
