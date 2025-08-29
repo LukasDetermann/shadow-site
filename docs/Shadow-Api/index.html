@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Shadow Api :: Shadow Api</title>
-    <meta name="generator" content="Antora 3.1.10">
+    <meta name="generator" content="Antora 3.1.12">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
   <body class="article">
@@ -56,9 +56,6 @@
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="Reflection.html">reflection</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="java.lang.model.html">java.lang.model</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
@@ -142,9 +139,9 @@ Accessing fields may or may not be supported.</p>
 void request()
 {
    //adapter for the reflection api
-   C_Class systemClass = R_Adapter.generalize(System.class);
+   C.Class systemClass = Adapter.generalize(System.class);
    //request the field "out" for the class java.lang.System
-   Response&lt;C_Field&gt; out = Provider.request(systemClass,
+   Response&lt;C.Field&gt; out = Provider.request(systemClass,
                                             Operations.DECLARED_GET_FIELD,
                                             "out");
 
@@ -152,14 +149,14 @@ void request()
    {
       //the implementation may not support this operation
       //e.g. it's impossible to access fields with reflection
-      case Response.Unsupported&lt;C_Field&gt; unsupported -&gt; Assertions.fail();
+      case Response.Unsupported&lt;C.Field&gt; unsupported -&gt; Assertions.fail();
       //the implementation may support this operation, but there is no
       //result for this instance
       //e.g. the class java.lang.System does not have a field called "out"
-      case Response.Empty&lt;C_Field&gt; empty -&gt; Assertions.fail();
+      case Response.Empty&lt;C.Field&gt; empty -&gt; Assertions.fail();
       //accessing fields via reflection is possible and java.lang.System
       //does have a field called "out" therefore a result is expected
-      case Response.Result&lt;C_Field&gt; result -&gt; assertNotNull(result.value());
+      case Response.Result&lt;C.Field&gt; result -&gt; assertNotNull(result.value());
    }
 }</code></pre>
 </div>
@@ -173,10 +170,10 @@ void request()
 void requestOrEmpty()
 {
    //adapter for the reflection api
-   C_Class systemClass = R_Adapter.generalize(System.class);
+   C.Class systemClass = Adapter.generalize(System.class);
    //request the field "out" for the class java.lang.System.
    //If its unsupported an Empty Optional is returned
-   Optional&lt;C_Field&gt; out = Provider.requestOrEmpty(systemClass,
+   Optional&lt;C.Field&gt; out = Provider.requestOrEmpty(systemClass,
                                                    Operations.DECLARED_GET_FIELD,
                                                    "out");
 
@@ -190,10 +187,10 @@ void requestOrEmpty()
 void requestOrThrow()
 {
    //adapter for the reflection api
-   C_Class systemClass = R_Adapter.generalize(System.class);
+   C.Class systemClass = Adapter.generalize(System.class);
    //request the field "out" for the class java.lang.System.
    //If its unsupported an Exception is thrown
-   C_Field out = Provider.requestOrThrow(systemClass,
+   C.Field out = Provider.requestOrThrow(systemClass,
                                          Operations.DECLARED_GET_FIELD,
                                          "out");
 
@@ -221,152 +218,79 @@ Each being able to support the complete featureset.</p>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.builder;
 
-import io.determann.shadow.api.annotation_processing.AP_Context;
-import io.determann.shadow.api.annotation_processing.AP_Processor;
-import io.determann.shadow.api.lang_model.shadow.LM_Nameable;
-import io.determann.shadow.api.lang_model.shadow.LM_QualifiedNameable;
-import io.determann.shadow.api.lang_model.shadow.structure.LM_Property;
-import io.determann.shadow.api.lang_model.shadow.type.LM_Class;
-import io.determann.shadow.api.lang_model.shadow.type.LM_Type;
+import io.determann.shadow.api.annotation_processing.Ap;
+import io.determann.shadow.api.dsl.Dsl;
+import io.determann.shadow.api.dsl.RenderingContext;
+import io.determann.shadow.api.dsl.class_.ClassBodyStep;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.lang.String.join;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
-/**
- * Builds a companion Builder class for each annotated class
- */
-public class ShadowBuilderProcessor extends AP_Processor
+/// Builds a companion Builder class for each annotated class
+public class ShadowBuilderProcessor
+      extends Ap.Processor
 {
    @Override
-   public void process(final AP_Context context)
+   public void process(final Ap.Context context)
    {
-      //iterate over every class annotated with the BuilderPattern annotation
-      for (LM_Class aClass : context
+      // iterate over every class annotated with the BuilderPattern annotation
+      for (Ap.Class toBuild : context
             .getClassesAnnotatedWith("io.determann.shadow.builder.BuilderPattern"))
       {
-         String toBuildQualifiedName = aClass.getQualifiedName();
-         //qualifiedName of the companion builder class
-         String builderQualifiedName = toBuildQualifiedName + "ShadowBuilder";
-         //simpleName of the companion builder class
-         String builderSimpleName = aClass.getName() + "ShadowBuilder";
-         String builderVariableName = uncapitalize(builderSimpleName);
+         // create the Builder Class
+         ClassBodyStep step = Dsl.class_()
+                                 .package_(toBuild.getPackage().getQualifiedName())
+                                 .name(toBuild.getName() + "ShadowBuilder");
 
-         //create a record holding the code needed to render a property in the builder
-         List&lt;BuilderElement&gt; builderElements =
-               aClass.getProperties()
-                     .stream()
-                     .filter(LM_Property::isMutable)
-                     .map(property -&gt; renderProperty(builderSimpleName,
-                                                     builderVariableName,
-                                                     property))
-                     .toList();
+         String toBuildVariableName = uncapitalize(toBuild.getName());
+         List&lt;String&gt; setterInvocations = new ArrayList&lt;&gt;();
+
+         // create a record holding the code needed to render a property in the builder
+         for (Ap.Property property : toBuild.getProperties()
+                                            .stream()
+                                            .filter(Ap.Property::isMutable)
+                                            .toList())
+         {
+            String propertyName = property.getName();
+
+            // render the existing field if possible, otherwise create a new one
+            step = property.getField().map(step::field)
+                           .orElse(step.field(Dsl.field(property.getType(), propertyName)));
+
+            // render the wither
+            step = step.method(Dsl.method()
+                                  .public_()
+                                  .resultType(step)//use the builder type
+                                  .name("with" + capitalize(propertyName))
+                                  .parameter(Dsl.parameter(property.getType(), propertyName))
+                                  .body("""
+                                        this.%1$s = %1$s;
+                                        return this;""".formatted(propertyName)));
+
+            // collect all setter invocations for the object being build
+            setterInvocations.add(toBuildVariableName + "." +
+                                  property.getSetterOrThrow().getName() +
+                                  "(" + propertyName + ");");
+         }
+
+         // render the build method
+         step = step.method(Dsl.method().public_().resultType(toBuild).name("build")
+                               .body("""
+                                     %1$s %2$s = new %1$s();
+                                     %3$s
+                                     return %2$s;
+                                     """.formatted(toBuild.getName(),
+                                                   toBuildVariableName,
+                                                   join("\n\n", setterInvocations))));
 
          //writes the builder
-         context.writeAndCompileSourceFile(builderQualifiedName,
-                                           renderBuilder(aClass,
-                                                         toBuildQualifiedName,
-                                                         builderSimpleName,
-                                                         builderVariableName,
-                                                         builderElements));
+         context.writeAndCompileSourceFile(toBuild.getQualifiedName() + "ShadowBuilder",
+                                           step.renderDeclaration(RenderingContext.DEFAULT));
       }
-   }
-
-   /**
-    * renders a companion builder class
-    */
-   private String renderBuilder(final LM_Class aClass,
-                                final String toBuildQualifiedName,
-                                final String builderSimpleName,
-                                final String builderVariableName,
-                                final List&lt;BuilderElement&gt; builderElements)
-   {
-      String fields = builderElements.stream()
-                                     .map(BuilderElement::field)
-                                     .collect(Collectors.joining("\n\n"));
-
-      String mutators = builderElements.stream()
-                                       .map(BuilderElement::mutator)
-                                       .collect(Collectors.joining("\n\n"));
-
-      String setterInvocations = builderElements.stream()
-                                                .map(BuilderElement::toBuildSetter)
-                                                .collect(Collectors.joining("\n\n"));
-      return """
-            package %1$s;
-                  
-            public class %2$s{
-               %3$s
-                  
-            %4$s
-                  
-               public %5$s build() {
-                  %5$s %6$s = new %5$s();
-                  %7$s
-                  return %6$s;
-               }
-            }
-            """.formatted(aClass.getPackage().getQualifiedName(),
-                          builderSimpleName,
-                          fields,
-                          mutators,
-                          toBuildQualifiedName,
-                          builderVariableName,
-                          setterInvocations);
-   }
-
-   /**
-    * Creates a {@link BuilderElement} for each property of the annotated pojo
-    */
-   private BuilderElement renderProperty(final String builderSimpleName,
-                                         final String builderVariableName,
-                                         final LM_Property property)
-   {
-      String propertyName = property.getName();
-      String type = renderType(property.getType());
-      String field = "private " + type + " " + propertyName + ";";
-
-      String mutator = """
-               public %1$s with%2$s(%3$s %4$s) {
-                  this.%4$s = %4$s;
-                  return this;
-               }
-            """.formatted(builderSimpleName,
-                          capitalize(propertyName),
-                          type,
-                          propertyName);
-
-      String toBuildSetter = builderVariableName + "." +
-                             property.getSetterOrThrow().getName() +
-                             "(" + propertyName + ");";
-
-      return new BuilderElement(field, mutator, toBuildSetter);
-   }
-
-   /**
-    * Used to render the code needed to render a property in the builder
-    *
-    * @param field ones rendered will hold the values being used to build the pojo
-    * @param mutator ones rendered will set the value of the {@link #field}
-    * @param toBuildSetter ones rendered will modify the build pojo
-    */
-   private record BuilderElement(String field,
-                                 String mutator,
-                                 String toBuildSetter) {}
-
-   private static String renderType(LM_Type type)
-   {
-      if (type instanceof LM_QualifiedNameable qualifiedNameable)
-      {
-         return qualifiedNameable.getQualifiedName();
-      }
-      if (type instanceof LM_Nameable nameable)
-      {
-         return nameable.getName();
-      }
-      return type.toString();
    }
 }</code></pre>
 </div>
@@ -382,9 +306,6 @@ public class ShadowBuilderProcessor extends AP_Processor
 <ul>
 <li>
 <p><a href="Annotation%20Processing.html" class="xref page">Annotation Processing</a></p>
-</li>
-<li>
-<p><a href="java.lang.model.html" class="xref page">java.lang.model</a></p>
 </li>
 <li>
 <p><a href="Reflection.html" class="xref page">reflection</a> (experimental)</p>

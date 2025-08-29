@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Testing the Consistency of Reflection and Annotation processing :: Shadow Api</title>
-    <meta name="generator" content="Antora 3.1.10">
+    <meta name="generator" content="Antora 3.1.12">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
   <body class="article">
@@ -56,9 +56,6 @@
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="Reflection.html">reflection</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="java.lang.model.html">java.lang.model</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
@@ -133,9 +130,9 @@ Accessing fields may or may not be supported.</p>
 void request()
 {
    //adapter for the reflection api
-   C_Class systemClass = R_Adapter.generalize(System.class);
+   C.Class systemClass = Adapter.generalize(System.class);
    //request the field "out" for the class java.lang.System
-   Response&lt;C_Field&gt; out = Provider.request(systemClass,
+   Response&lt;C.Field&gt; out = Provider.request(systemClass,
                                             Operations.DECLARED_GET_FIELD,
                                             "out");
 
@@ -143,14 +140,14 @@ void request()
    {
       //the implementation may not support this operation
       //e.g. it's impossible to access fields with reflection
-      case Response.Unsupported&lt;C_Field&gt; unsupported -&gt; Assertions.fail();
+      case Response.Unsupported&lt;C.Field&gt; unsupported -&gt; Assertions.fail();
       //the implementation may support this operation, but there is no
       //result for this instance
       //e.g. the class java.lang.System does not have a field called "out"
-      case Response.Empty&lt;C_Field&gt; empty -&gt; Assertions.fail();
+      case Response.Empty&lt;C.Field&gt; empty -&gt; Assertions.fail();
       //accessing fields via reflection is possible and java.lang.System
       //does have a field called "out" therefore a result is expected
-      case Response.Result&lt;C_Field&gt; result -&gt; assertNotNull(result.value());
+      case Response.Result&lt;C.Field&gt; result -&gt; assertNotNull(result.value());
    }
 }</code></pre>
 </div>
@@ -164,10 +161,10 @@ void request()
 void requestOrEmpty()
 {
    //adapter for the reflection api
-   C_Class systemClass = R_Adapter.generalize(System.class);
+   C.Class systemClass = Adapter.generalize(System.class);
    //request the field "out" for the class java.lang.System.
    //If its unsupported an Empty Optional is returned
-   Optional&lt;C_Field&gt; out = Provider.requestOrEmpty(systemClass,
+   Optional&lt;C.Field&gt; out = Provider.requestOrEmpty(systemClass,
                                                    Operations.DECLARED_GET_FIELD,
                                                    "out");
 
@@ -181,10 +178,10 @@ void requestOrEmpty()
 void requestOrThrow()
 {
    //adapter for the reflection api
-   C_Class systemClass = R_Adapter.generalize(System.class);
+   C.Class systemClass = Adapter.generalize(System.class);
    //request the field "out" for the class java.lang.System.
    //If its unsupported an Exception is thrown
-   C_Field out = Provider.requestOrThrow(systemClass,
+   C.Field out = Provider.requestOrThrow(systemClass,
                                          Operations.DECLARED_GET_FIELD,
                                          "out");
 
@@ -217,12 +214,11 @@ void classDeclarationRendering()
    TckTest.withSource(name, content)
           .test(implementation -&gt;
                {
-                  C_Class cClass = Provider.requestOrThrow(implementation,
+                  C.Class cClass = Provider.requestOrThrow(implementation,
                                                            Operations. GET_CLASS,
                                                            "InterpolateGenericsExample");
 
-                  assertEquals(expected, Renderer.render(RenderingContext.DEFAULT, cClass)
-                                                 .declaration());
+                  assertEquals(expected, cClass.renderDeclaration(RenderingContext.DEFAULT));
                });
 }</code></pre>
 </div>
