@@ -3,24 +3,23 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>How are Annotation Processors loaded? :: Shadow Api</title>
-    <meta name="generator" content="Antora 3.1.10">
-    <link rel="stylesheet" href="../../_/css/site.css">
+    <title>How are Annotation Processors loaded? :: Derivandi</title>
+    <meta name="generator" content="Antora 3.2.1">
+    <link rel="stylesheet" href="../_/css/site.css">
   </head>
   <body class="article">
 <header class="header">
     <nav class="navbar">
         <div class="navbar-brand">
             <div class="navbar-item">
-                <a href="#">Shadow Api</a>
+                <a href="#">Derivandi</a>
             </div>
         </div>
         <div id="topbar-nav" class="navbar-menu">
             <div class="navbar-end">
-                <a class="navbar-item" href="../index.html">Home</a>
-                <a class="navbar-item" href="../Annotation%20Processing.html">Implementations</a>
-                <a class="navbar-item" href="Meta%20Model.html">Articles</a>
-                <a class="navbar-item" href="https://github.com/LukasDetermann/shadow">
+                <a class="navbar-item" href="index.html">Home</a>
+                <a class="navbar-item" href="AptLoading.html">Articles</a>
+                <a class="navbar-item" href="https://github.com/LukasDetermann/Derivandi">
                     <span class="icon">
                         <svg aria-hidden="true" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg"
                              viewBox="0 0 98 96">
@@ -35,47 +34,55 @@
         </div>
     </nav>
 </header><div class="body">
-<div class="nav-container" data-component="Shadow-Api" data-version="">
+<div class="nav-container" data-component="Derivandi" data-version="">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
     <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
-    <h3 class="title"><a href="../index.html">Shadow-Api</a></h3>
+    <h3 class="title"><a href="index.html">Derivandi</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../Annotation%20Processing.html">Annotation Processing</a>
+    <span class="nav-text">Introductions</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#How are Annotation Processors loaded?">Loading</a>
+    <a class="nav-link" href="Intro%20for%20new.html">new to metaprogramming</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Intro%20with%20meta.html">proficient in reflection</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Intro%20with%20apt.html">proficient in annotation processing</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../Reflection.html">reflection</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../java.lang.model.html">java.lang.model</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Examples</span>
 <ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Builder%20Example.html">Builder</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Static%20Interface.html">Static Interface</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Proxy%20Example.html">Proxy</a>
+  </li>
+</ul>
+  </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Articles</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ConsistencyTest.html">Consistency Testing</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="Meta%20Model.html">Meta Model</a>
-  </li>
   <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="AptLoading.html">Annotation Processor loading</a>
+    <a class="nav-link" href="AptLoading.html">How are Annotation Processors loaded?</a>
   </li>
 </ul>
   </li>
@@ -90,12 +97,12 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../index.html" class="home-link"></a>
+  <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="../index.html">Shadow-Api</a></li>
+    <li><a href="index.html">Derivandi</a></li>
     <li>Articles</li>
-    <li><a href="AptLoading.html">Annotation Processor loading</a></li>
+    <li><a href="AptLoading.html">How are Annotation Processors loaded?</a></li>
   </ul>
 </nav>
 </div>
@@ -108,14 +115,11 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Annotation Processors can be loaded in many different ways.
-Some straight forward and some more indirect.
-In this article I want to document how the loading of Annotation Processors works and what Pitfalls there are.</p>
-</div>
-<div class="paragraph">
-<p>Tldr: Configure them explicitly as
-<a href="https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#annotationProcessorPaths">&lt;annotationProcessorPaths&gt;</a>
-or with <a href="https://issues.apache.org/jira/browse/MCOMPILER-412">this workaround</a> for the jpms.</p>
+<p>Large projects can become complicated to build.
+One factor contributing to that is annotation processors.
+They can be loaded in many different ways.
+It can be hard to understand what Processors run and how seemingly unconnected changes affect that.
+I want to explain in this article how Annotation Processors are loaded and the potential pitfalls.</p>
 </div>
 </div>
 </div>
@@ -146,7 +150,7 @@ This Pseudocode demonstrates how.</p>
 private static boolean isRequested(String[] args)
 {
    return isOptionSet(args, "-processor") ||
-          isOptionSet(args, "-processorpath") ||//alias --processor-path
+          isOptionSet(args, "---processor-path") ||
           isOptionSet(args, "--processor-module-path") ||
           isOptionSet(args, "-proc:", "only") ||
           isOptionSet(args, "-proc:", "full") ||
@@ -204,12 +208,13 @@ private static List&lt;AnnotationProcessor&gt; loadProcessors()
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td><code>-Xprint</code>
 <div class="paragraph">
-<p>With this command line Option a build in javac Annotation Processor is used to print everything it sees about a class.</p>
+<p>With this command line Option a build in javac Annotation Processor is used to print everything it sees about a class.
+This can be very useful to get familiar with the code model of annotation processing.</p>
 </div>
 <div class="listingblock">
 <div class="title"><code>javac -Xprint HelloWorld.java</code></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.article.apt_loading;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.derivandi.article.apt_loading;
 
 public class HelloWorld {
    public static void main(String[] args) {
@@ -220,13 +225,12 @@ public class HelloWorld {
 </div>
 <div class="paragraph">
 <p>Annotation Processors can not access the content of methods.
-But default Constructors are present.
-It&#8217;s an easy way to get familiar with the code mode an Annotation Processor can use.</p>
+But default Constructors are present.</p>
 </div>
 <div class="listingblock">
-<div class="title">result</div>
+<div class="title">parts</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.determann.shadow.article.apt_loading;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.derivandi.article.apt_loading;
 
 public class HelloWorld {
 
@@ -281,12 +285,12 @@ This is basically a filter for one of the other options or the classpath.
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
 <td><code>--processor-module-path</code>
-The Module path for Annotation Processors should be used if the processor and all dependencies are modules.</td>
+The module path for loading Annotation processors</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
 <td><code>--processor-path</code> or <code>-processorpath</code>
-Should be used if an Annotation Processors or one of its dependencies is not a module</td>
+The path for loading Annotation processors.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
@@ -316,7 +320,7 @@ This is how maven does it.</p>
 <div class="sect3">
 <h4 id="_modularised"><a class="anchor" href="#_modularised"></a>Modularised</h4>
 <div class="paragraph">
-<p>Maven puts all referenced modules on the module-path and every other dependency on the class-path.</p>
+<p>Every module that the application requires is placed on the module-path by Maven, while all other dependencies are placed on the class-path.</p>
 </div>
 </div>
 </div>
@@ -416,7 +420,7 @@ Some configuration is needed.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_conclusion"><a class="anchor" href="#_conclusion"></a>Conclusion</h2>
+<h2 id="_opinion"><a class="anchor" href="#_opinion"></a>Opinion</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>I would recommend to explicitly configure Annotation Processors in any case.
@@ -451,7 +455,7 @@ Who would expect an Annotation Processor to stop working, just because its now r
 <footer class="footer">
     <p>The Ui for this site is based in part on the <a href="https://gitlab.com/antora/antora-ui-default">Antora Default UI</a></p>
 </footer>
-<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
-<script async src="../../_/js/vendor/highlight.js"></script>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
   </body>
 </html>

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>java.lang.model :: Shadow Api</title>
-    <meta name="generator" content="Antora 3.1.10">
+    <title>Untitled :: Derivandi</title>
+    <meta name="generator" content="Antora 3.2.1">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
   <body class="article">
@@ -12,15 +12,14 @@
     <nav class="navbar">
         <div class="navbar-brand">
             <div class="navbar-item">
-                <a href="#">Shadow Api</a>
+                <a href="#">Derivandi</a>
             </div>
         </div>
         <div id="topbar-nav" class="navbar-menu">
             <div class="navbar-end">
                 <a class="navbar-item" href="index.html">Home</a>
-                <a class="navbar-item" href="Annotation%20Processing.html">Implementations</a>
-                <a class="navbar-item" href="ConsistencyTest.html">Articles</a>
-                <a class="navbar-item" href="https://github.com/LukasDetermann/shadow">
+                <a class="navbar-item" href="AptLoading.html">Articles</a>
+                <a class="navbar-item" href="https://github.com/LukasDetermann/Derivandi">
                     <span class="icon">
                         <svg aria-hidden="true" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg"
                              viewBox="0 0 98 96">
@@ -35,40 +34,55 @@
         </div>
     </nav>
 </header><div class="body">
-<div class="nav-container" data-component="Shadow-Api" data-version="">
+<div class="nav-container" data-component="Derivandi" data-version="">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
     <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
-    <h3 class="title"><a href="index.html">Shadow-Api</a></h3>
+    <h3 class="title"><a href="index.html">Derivandi</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="Annotation%20Processing.html">Annotation Processing</a>
+    <span class="nav-text">Introductions</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="AptLoading.html">Loading</a>
+    <a class="nav-link" href="Intro%20for%20new.html">new to metaprogramming</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="Intro%20with%20meta.html">proficient in reflection</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Intro%20with%20apt.html">proficient in annotation processing</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="Reflection.html">reflection</a>
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Examples</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Builder%20Example.html">Builder</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="java.lang.model.html">java.lang.model</a>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Static%20Interface.html">Static Interface</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Proxy%20Example.html">Proxy</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Articles</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ConsistencyTest.html">Consistency Testing</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="Meta%20Model.html">Meta Model</a>
+    <a class="nav-link" href="AptLoading.html">How are Annotation Processors loaded?</a>
   </li>
 </ul>
   </li>
@@ -86,8 +100,9 @@
   <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Shadow-Api</a></li>
-    <li><a href="java.lang.model.html">java.lang.model</a></li>
+    <li><a href="index.html">Derivandi</a></li>
+    <li>Introductions</li>
+    <li><a href="Intro%20with%20meta.html">proficient in reflection</a></li>
   </ul>
 </nav>
 </div>
@@ -96,15 +111,15 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">java.lang.model</h1>
 <div class="sect1">
-<h2 id="_what_is_this"><a class="anchor" href="#_what_is_this"></a>What is this?</h2>
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><code>java.lang.model</code> is an Api that is used by <a href="#Annotation Processing">Annotation Processing</a> and the
-<a href="https://docs.oracle.com/javase/9/docs/api/jdk/javadoc/doclet/package-summary.html">new Doclet API</a>.
-There was a Proposal for an implementation based on reflection
-<a href="https://openjdk.org/jeps/119">JEP 119</a> that was not completed.</p>
+<p>This guide is for people proficient in Reflection. Other guides are <a href="index.html" class="xref page">available</a>.</p>
+</div>
+<div class="paragraph">
+<p>Annotation Processing is metaprogramming at compile time.
+This projects wraps the Java API to make it easier to use.</p>
 </div>
 </div>
 </div>

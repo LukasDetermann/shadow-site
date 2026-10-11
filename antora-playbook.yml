@@ -1,10 +1,10 @@
 site:
-  title: Shadow Api
-  start_page: Shadow-Api::index.adoc
+  title: Derivandi
+  start_page: Derivandi::index.adoc
   robots: allow
 content:
   sources:
-    - url: ../shadow
+    - url: ../derivandi
       branches: master
       start_path: documentation
 ui:

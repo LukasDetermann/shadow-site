@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Proxy :: Derivandi</title>
+    <meta name="generator" content="Antora 3.2.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <a href="#">Derivandi</a>
+            </div>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <a class="navbar-item" href="index.html">Home</a>
+                <a class="navbar-item" href="AptLoading.html">Articles</a>
+                <a class="navbar-item" href="https://github.com/LukasDetermann/Derivandi">
+                    <span class="icon">
+                        <svg aria-hidden="true" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 98 96">
+                            <path fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
+                                  fill="#fff"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header><div class="body">
+<div class="nav-container" data-component="Derivandi" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Derivandi</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Introductions</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Intro%20for%20new.html">new to metaprogramming</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Intro%20with%20meta.html">proficient in reflection</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Intro%20with%20apt.html">proficient in annotation processing</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Examples</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Builder%20Example.html">Builder</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="Static%20Interface.html">Static Interface</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="Proxy%20Example.html">Proxy</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Articles</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="AptLoading.html">How are Annotation Processors loaded?</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Derivandi</a></li>
+    <li>Examples</li>
+    <li><a href="Proxy%20Example.html">Proxy</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Proxy</h1>
+<div class="paragraph">
+<p>Derivandi can be used to generated new classes.
+Often this is used to generate implementations of interfaces or abstract classes.</p>
+</div>
+<div class="paragraph">
+<p>In this Example we want to create a proxy, that counts how often <code>Map#put</code> gets called.
+To do that we create an abstract class, containing only the logic we need.
+We than mark that class with <code>@Proxy</code> and the delegate with <code>@Delegate</code>.
+A Derivandi Processor can now be written to generate an implementation of <code>MapProxy</code> that delegates all not implemented methods to the Delegate.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Proxy
+public abstract class MapProxy&lt;K,V&gt; implements Map&lt;K, V&gt; {
+
+   private int counter = 0;
+
+   @De1egate
+   protected final Map&lt;K, V&gt; delegate = new HashMap&lt;&gt;();
+
+   @Override
+   public V put(K key, V value) {
+
+      counter++;
+
+      return delegate.put(key,value);
+   }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import com.derivandi.api.D;
+import com.derivandi.api.dsl.JavaDsl;
+import com.derivandi.api.dsl.class_.ClassBodyStep;
+import com.derivandi.api.dsl.constructor.ConstructorRenderable;
+import com.derivandi.api.dsl.method.MethodRenderable;
+import com.derivandi.api.processor.Processor;
+import com.derivandi.api.processor.ProcessorBuilder;
+import com.derivandi.api.processor.ProcessorConfiguration;
+import com.derivandi.api.processor.SimpleContext;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.derivandi.api.dsl.JavaDsl.*;
+import static java.util.function.Predicate.not;
+
+public class GenerationProcessor extends Processor {
+
+   @Override
+   public ProcessorConfiguration buildProcessor(ProcessorBuilder processorBuilder) {
+      return processorBuilder.process(GenerationProcessor::process);
+   }
+
+   private static void process(SimpleContext context) {
+      D.Annotation proxyAnnotation = context.getAnnotationOrThrow(Proxy.class.getName());
+      D.Annotation delegateAnnotation = context.getAnnotationOrThrow(Delegate.class.getName());
+
+      for (D.Class annotated : context.getClassesAnnotatedWith(proxyAnnotation)) {
+         D.Declared delegate = getValid(context, annotated, delegateAnnotation);
+         if (delegate == null) {
+            continue;
+         }
+         context.writeAndCompileSourceFile(renderProxyImpl(context, annotated, delegate));
+      }
+   }
+
+   private static D.Declared getValid(SimpleContext context,
+                                      D.Class annotated,
+                                      D.Annotation delegateAnnotation) {
+
+      List&lt;D.Field&gt; delegates = annotated.getFields()
+                                         .stream()
+                                         .filter(field -&gt; field.isAnnotatedWith(delegateAnnotation))
+                                         .toList();
+
+      if (!annotated.isAbstract()) {
+         context.logAndRaiseErrorAt(annotated, "Not abstract");
+         return null;
+      }
+      if (annotated.getDirectInterfaces().isEmpty()) {
+         context.logAndRaiseErrorAt(annotated, "Does not implement any Interface");
+         return null;
+      }
+      if (delegates.size() != 1) {
+         context.logAndRaiseErrorAt(annotated, "A Proxy has to have one Delegate");
+         return null;
+      }
+      D.Field delegate = delegates.getFirst();
+      if (!delegate.isProtected() &amp;&amp; !delegate.isPublic()) {
+         context.logAndRaiseErrorAt(delegate, "Delegate needs to be accessible to child classes");
+         return null;
+      }
+      if (!(delegate.getType() instanceof D.Declared declaredDelegate)) {
+         context.logAndRaiseErrorAt(delegate, "Delegate must be a Declared Type");
+         return null;
+      }
+      if (annotated.getConstructors()
+                   .stream()
+                   .filter(constructor -&gt; constructor.getParameterTypes().size() == 1)
+                   .noneMatch(constructor -&gt; constructor.getParameterTypes()
+                                                        .stream()
+                                                        .findFirst()
+                                                        .orElseThrow()
+                                                        .equals(declaredDelegate))) {
+         context.logAndRaiseErrorAt(annotated, "Needs to have a Constructor with with Type of the Delegate");
+         return null;
+      }
+      return declaredDelegate;
+   }
+
+   private static ClassBodyStep renderProxyImpl(SimpleContext context,
+                                                D.Class annotated,
+                                                D.Declared delegate) {
+      return class_()
+            .package_(annotated.getPackage())
+            .public_().name(annotated.getName() + "Impl")
+            .genericDeclaration(annotated.getGenericDeclarations())
+            .extends_(annotated)
+            .constructor(renderConstructors(delegate))
+            .method(renderProxyMethods(context, annotated, delegate));
+   }
+
+   private static ConstructorRenderable renderConstructors(D.Declared delegate)
+   {
+      return constructor().surroundingType()
+                          .parameter(JavaDsl.parameter(delegate, "delegate"))
+                          .body("super(delegate);");
+   }
+
+   private static List&lt;MethodRenderable&gt; renderProxyMethods(SimpleContext context,
+                                                              D.Class annotated,
+                                                              D.Declared delegate) {
+      return delegate.getMethods()
+                     .stream()
+                     .filter(not(D.StaticModifiable::isStatic))
+                     .filter(method -&gt; annotated.getMethods()
+                                                .stream()
+                                                .noneMatch(method1 -&gt; method1.overrides(method)))
+                     .map(method -&gt; renderProxyMethod(context, method))
+                     .toList();
+   }
+
+   private static MethodRenderable renderProxyMethod(SimpleContext context,
+                                                     D.Method method) {
+      return method()
+            .annotate(annotationUsage().type(annotation().package_(
+                  "java.lang").name("Override")))
+            .public_()
+            .resultType(method.getResultType())
+            .name(method.getName())
+            .parameter(method.getParameters())
+            .throws_(method.getThrows())
+            .body(renderBody(context, method));
+   }
+
+   private static String renderBody(SimpleContext context,
+                                    D.Method method) {
+
+      String parameters = method.getParameters()
+                             .stream()
+                             .map(D.Nameable::getName)
+                             .collect(Collectors.joining(", "));
+
+      if (method.getResultType().equals(context.getConstants().getVoid())) {
+         return "delegate." + method.getName() + "(" + parameters + ");";
+      }
+      return "return delegate." + method.getName() + "(" + parameters + ");";
+   }
+}</code></pre>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+    <p>The Ui for this site is based in part on the <a href="https://gitlab.com/antora/antora-ui-default">Antora Default UI</a></p>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
