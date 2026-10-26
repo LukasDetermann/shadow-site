@@ -52,13 +52,13 @@
     <span class="nav-text">Introductions</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="Intro%20for%20new.html">new to metaprogramming</a>
+    <a class="nav-link" href="From%20ordinary%20Java%20to%20generated%20code.html">From ordinary Java to generated code</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="Intro%20with%20meta.html">proficient in reflection</a>
+    <a class="nav-link" href="From%20runtime%20reflection%20to%20compile-time%20safety.html">From runtime reflection to compile-time safety</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="Intro%20with%20apt.html">proficient in annotation processing</a>
+    <a class="nav-link" href="From%20annotation%20processing%20to%20simpler%20code%20generation.html">From annotation processing to simpler code generation</a>
   </li>
 </ul>
   </li>
@@ -114,34 +114,173 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>Source code analysis and generation at compile time</strong>
-based on Annotation Processing, also called Annotation Processing Tool (APT).</p>
+<p>Derivandi can analyse amd generate Source code at compile time.
+It is based on Annotation Processing, also called Annotation Processing Tool (APT).</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_guides"><a class="anchor" href="#_guides"></a>Guides</h2>
+<h2 id="_key_features"><a class="anchor" href="#_key_features"></a>Key Features</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Depending on your background, there are different guides:</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="Intro%20for%20new.html" class="xref page">new to metaprogramming</a></p>
+<p>nulls save</p>
 </li>
 <li>
-<p><a href="Intro%20with%20meta.html" class="xref page">proficient in reflection or another metaprogramming technic</a></p>
+<p>One Data Structure instead of two partially overlapping ones</p>
 </li>
 <li>
-<p><a href="Intro%20with%20apt.html" class="xref page">proficient in annotation processing</a></p>
+<p>Types for Leafs of the abstract syntax tree, like Class, Enum or Method</p>
+</li>
+<li>
+<p>Java Source File DSL for easy generation</p>
+</li>
+<li>
+<p>Java Beans Support</p>
+</li>
+<li>
+<p>Generation of typesafe Annotation Representations</p>
+</li>
+<li>
+<p>Adapters for interoperability with APT</p>
+</li>
+<li>
+<p>Reduces Boilerplate needed to work with APT. Processors have ~20% less LOC</p>
+</li>
+<li>
+<p>dependency free</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_when_to_use_apt"><a class="anchor" href="#_when_to_use_apt"></a>When to use APT?</h2>
+<h2 id="_introductions"><a class="anchor" href="#_introductions"></a>Introductions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Depending on your background, there are different introductions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="From%20ordinary%20Java%20to%20generated%20code.html" class="xref page">From ordinary Java to generated code</a></p>
+</li>
+<li>
+<p><a href="From%20runtime%20reflection%20to%20compile-time%20safety.html" class="xref page">From runtime reflection to compile-time safety</a></p>
+</li>
+<li>
+<p><a href="From%20annotation%20processing%20to%20simpler%20code%20generation.html" class="xref page">From annotation processing to simpler code generation</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="Builder%20Example.html" class="xref page">Builder</a></p>
+</li>
+<li>
+<p><a href="Static%20Interface.html" class="xref page">Static Interface</a></p>
+</li>
+<li>
+<p><a href="Proxy%20Example.html" class="xref page">Proxy</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup"><a class="anchor" href="#_setup"></a>Setup</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_dependency"><a class="anchor" href="#_dependency"></a>Dependency</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependencies&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;com.derivandi&lt;/groupId&gt;
+		&lt;artifactId&gt;derivandi&lt;/artifactId&gt;
+		&lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+	&lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;build&gt;
+	&lt;plugins&gt;
+		&lt;plugin&gt;
+			&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+			&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+			&lt;version&gt;${maven-compiler-plugin.version}&lt;/version&gt;
+			&lt;configuration&gt;
+				&lt;annotationProcessorPaths&gt;
+					&lt;path&gt;
+						&lt;groupId&gt;com.derivandi&lt;/groupId&gt;
+						&lt;artifactId&gt;derivandi&lt;/artifactId&gt;
+						&lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+					&lt;/path&gt;
+				&lt;/annotationProcessorPaths&gt;
+			&lt;/configuration&gt;
+		&lt;/plugin&gt;
+	&lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_processor"><a class="anchor" href="#_processor"></a>Processor</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.example;
+
+import com.derivandi.api.D;
+import com.derivandi.api.processor.*;
+
+
+public final class MyProcessor extends DerivandiProcessor {
+
+   @Override
+	public ProcessorConfiguration buildProcessor(ProcessorBuilder builder) {
+		return builder.process(BuildableProcessor::process);
+	}
+
+	private static void process(SimpleContext context) {
+
+		for (D.Class annotated : context.getClassesAnnotatedWith(/** todo */)) {
+         //do stuff
+		}
+	}
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_register_the_processor"><a class="anchor" href="#_register_the_processor"></a>Register the Processor</h3>
+<div class="paragraph">
+<p>Processors can be used on the classpath or modulepath.
+To make then discoverable they need to be registered for each path type.</p>
+</div>
+<div class="sect3">
+<h4 id="_without_java_modules"><a class="anchor" href="#_without_java_modules"></a>Without Java Modules</h4>
+<div class="paragraph">
+<p>Create a File at <code>src/main/resources/META-INF/services/</code> called <code>javax.annotation.processing.Processor</code>.
+And add all qualified names of your processors with one per line. In this case <code>org.example.MyProcessor</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_with_java_modules"><a class="anchor" href="#_with_java_modules"></a>With Java Modules</h4>
+<div class="paragraph">
+<p>add <code>provides javax.annotation.processing.Processor with org.example.MyProcessor;</code> to your module-info.java</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_to_use_compile_time_meta_programming"><a class="anchor" href="#_when_to_use_compile_time_meta_programming"></a>When to use compile time meta-programming?</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -172,7 +311,7 @@ based on Annotation Processing, also called Annotation Processing Tool (APT).</p
 </div>
 </div>
 <div class="sect1">
-<h2 id="_when_not_to_use_apt"><a class="anchor" href="#_when_not_to_use_apt"></a>When not to use APT?</h2>
+<h2 id="_when_not_to_use_compile_time_meta_programming"><a class="anchor" href="#_when_not_to_use_compile_time_meta_programming"></a>When not to use compile time meta-programming?</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -181,85 +320,6 @@ based on Annotation Processing, also called Annotation Processing Tool (APT).</p
 </li>
 <li>
 <p>Knowledge about the reflection is very common. Adding a new Technology increases the maintenance burden at least temporally</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_why_this_library"><a class="anchor" href="#_why_this_library"></a>Why this Library?</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Most projects build tooling around APT anyways. When migrating to this Library LOC for the Processor can be reduced by 20-30%</p>
-</li>
-<li>
-<p>This project is easier to use and avoids common pitfalls of APT</p>
-</li>
-<li>
-<p>It provides adapters so you’re not locked in and can easily work with other APT tooling</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Some key features are</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>dependency free</p>
-</li>
-<li>
-<p>nulls save</p>
-</li>
-<li>
-<p>One Data Structure instead of two partially overlapping ones</p>
-</li>
-<li>
-<p>Types for Leafs of the abstract syntax tree, like Class, Enum or Method</p>
-</li>
-<li>
-<p>Java Source File DSL for easy generation</p>
-</li>
-<li>
-<p>Java Beans Support</p>
-</li>
-<li>
-<p>Generation of typesafe Annotation Representations</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="Builder%20Example.html" class="xref page">Builder</a></p>
-</li>
-<li>
-<p><a href="Static%20Interface.html" class="xref page">Static Interface</a></p>
-</li>
-<li>
-<p><a href="Proxy%20Example.html" class="xref page">Proxy</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_next_goals"><a class="anchor" href="#_next_goals"></a>Next Goals</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Add DSL support for method body contents</p>
-</li>
-<li>
-<p>More examples</p>
 </li>
 </ul>
 </div>

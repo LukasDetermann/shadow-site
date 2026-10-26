@@ -52,13 +52,13 @@
     <span class="nav-text">Introductions</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="Intro%20for%20new.html">new to metaprogramming</a>
+    <a class="nav-link" href="From%20ordinary%20Java%20to%20generated%20code.html">From ordinary Java to generated code</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="Intro%20with%20meta.html">proficient in reflection</a>
+    <a class="nav-link" href="From%20runtime%20reflection%20to%20compile-time%20safety.html">From runtime reflection to compile-time safety</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="Intro%20with%20apt.html">proficient in annotation processing</a>
+    <a class="nav-link" href="From%20annotation%20processing%20to%20simpler%20code%20generation.html">From annotation processing to simpler code generation</a>
   </li>
 </ul>
   </li>
@@ -131,7 +131,7 @@ import java.lang.annotation.Target;
 
 import com.derivandi.api.D;
 import com.derivandi.api.dsl.class_.ClassBodyStep;
-import com.derivandi.api.processor.Processor;
+import com.derivandi.api.processor.DerivandiProcessor;
 import com.derivandi.api.processor.ProcessorBuilder;
 import com.derivandi.api.processor.ProcessorConfiguration;
 import com.derivandi.api.processor.SimpleContext;
@@ -146,7 +146,7 @@ import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 /// Builds a companion Builder class for each annotated class
 public class DerivandiBuilderProcessor
-      extends Processor
+      extends DerivandiProcessor
 {
    private static final String BUILDER_PATTERN = "com.derivandi.builder.BuilderPattern";
 
